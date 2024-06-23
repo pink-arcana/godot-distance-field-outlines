@@ -1,1 +1,3 @@
-# godot-distance-field-outlines
+# Distance Field Outlines Demo
+
+Coming soon!
