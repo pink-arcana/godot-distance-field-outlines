@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DFOutlineSettings" load_steps=2 format=3 uid="uid://r4ni87uv4lcu"]
+
+[ext_resource type="Script" path="res://shared_dependencies/df_outline_settings.gd" id="1_0ra6o"]
+
+[resource]
+script = ExtResource("1_0ra6o")
+outline_width = 8
+viewport_size = Vector2i(1920, 1080)
+reset_viewport_size = false
+sobel_threshold = 0.05
+outline_effect = 0
+outline_color = Color(0, 0, 0, 1)
+background_color = Color(1, 1, 1, 1)
+use_background_color = false
+smoothing_distance = 1.5
+depth_fade_mode = 0
+depth_fade_start = 4.0
+depth_fade_end = 40.0
+min_outline_width = 4.0
+min_outline_alpha = 0.0

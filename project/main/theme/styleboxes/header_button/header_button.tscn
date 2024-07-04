@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://b38of36pw26wi"]
+
+[ext_resource type="Texture2D" uid="uid://dnkgxmtkmk0jm" path="res://main/theme/icons/minus-circle.svg" id="1_lclut"]
+[ext_resource type="Script" path="res://main/theme/minimize_button.gd" id="2_tmc3p"]
+[ext_resource type="Texture2D" uid="uid://cvytgdye3hgml" path="res://main/theme/icons/plus-circle.svg" id="3_su51v"]
+
+[node name="HeaderButton" type="Button"]
+custom_minimum_size = Vector2(300, 0)
+size_flags_horizontal = 8
+theme_type_variation = &"HeaderButton"
+toggle_mode = true
+button_pressed = true
+text = "Camera Controls"
+icon = ExtResource("1_lclut")
+script = ExtResource("2_tmc3p")
+maximized_icon = ExtResource("1_lclut")
+minimized_icon = ExtResource("3_su51v")

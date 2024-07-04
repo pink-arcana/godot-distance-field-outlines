@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://d3er2o2s7qv7t"]
+
+[ext_resource type="PackedScene" uid="uid://dinqe1tl7w3xi" path="res://main/demo_scenes/shapes/shapes.tscn" id="2_hcqma"]
+[ext_resource type="Script" path="res://shared_dependencies/df_outline_settings.gd" id="3_iduxx"]
+[ext_resource type="Script" path="res://df_outline_ce/df_outline_ce.gd" id="4_6a3v1"]
+
+[sub_resource type="Resource" id="Resource_im0pr"]
+script = ExtResource("3_iduxx")
+outline_width = 1024
+viewport_size = Vector2i(1920, 1080)
+reset_viewport_size = false
+sobel_threshold = 0.05
+outline_effect = 0
+outline_color = Color(0, 0, 0, 1)
+background_color = Color(1, 1, 1, 1)
+use_background_color = false
+smoothing_distance = 1.5
+depth_fade_mode = 0
+depth_fade_start = 4.0
+depth_fade_end = 40.0
+min_outline_width = 4.0
+min_outline_alpha = 0.0
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_fw67l"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("4_6a3v1")
+outline_settings = SubResource("Resource_im0pr")
+print_jfa_updates = false
+print_buffer_resize = false
+
+[sub_resource type="Compositor" id="Compositor_l7jqr"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_fw67l")])
+
+[node name="ShapesCEDemo" type="Node3D"]
+
+[node name="ShapesScene" parent="." instance=ExtResource("2_hcqma")]
+
+[node name="GimbalY" parent="ShapesScene/CameraGimbal" index="0"]
+transform = Transform3D(3.0725, 0, 0.694446, 0, 3.15, 0, -0.694446, 0, 3.0725, 0, 0, 0)
+
+[node name="GimbalX" parent="ShapesScene/CameraGimbal/GimbalY" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.971875, 0.235498, 0, -0.235498, 0.971875, 0, 0, 0)
+
+[node name="Camera3D" parent="ShapesScene/CameraGimbal/GimbalY/GimbalX" index="0" groups=["DFCamera"]]
+compositor = SubResource("Compositor_l7jqr")
+
+[editable path="ShapesScene"]
+[editable path="ShapesScene/CameraGimbal"]

@@ -1,0 +1,85 @@
+[gd_scene load_steps=3 format=3 uid="uid://df1u7wfoafe4e"]
+
+[ext_resource type="StyleBox" uid="uid://dk32sc7crch78" path="res://addons/pa_performance_monitor/performance_snapshot/panel.tres" id="1_1q40e"]
+[ext_resource type="Script" path="res://addons/pa_performance_monitor/performance_snapshot/save_panel.gd" id="1_tbaeu"]
+
+[node name="SavePanel" type="PopupPanel"]
+size = Vector2i(482, 293)
+visible = true
+content_scale_mode = 1
+content_scale_aspect = 1
+theme_override_styles/panel = ExtResource("1_1q40e")
+script = ExtResource("1_tbaeu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 466.0
+offset_bottom = 277.0
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Create performance snapshot"
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Directory"
+
+[node name="DirTextEdit" type="TextEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+scroll_fit_content_height = true
+
+[node name="Label2" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Subdirectory"
+
+[node name="SubdirTextEdit" type="TextEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+scroll_fit_content_height = true
+
+[node name="Label3" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Name"
+
+[node name="NameTextEdit" type="TextEdit" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+scroll_fit_content_height = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Start"
+
+[node name="CancelButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Cancel"

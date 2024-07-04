@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://pcdu5w7j88he"]
+
+[ext_resource type="Script" path="res://main/gui_layer/exit_button.gd" id="1_iv3uh"]
+
+[node name="ExitButton" type="Button"]
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "EXIT"
+script = ExtResource("1_iv3uh")

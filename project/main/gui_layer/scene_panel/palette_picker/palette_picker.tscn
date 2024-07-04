@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://h5t4lo0sos4"]
+
+[ext_resource type="Theme" uid="uid://byq2b5g0yii0a" path="res://main/theme/palette_picker.tres" id="1_dswfu"]
+[ext_resource type="Script" path="res://main/gui_layer/scene_panel/palette_picker/palette_picker.gd" id="1_kufif"]
+[ext_resource type="PackedScene" uid="uid://cp75cotwb1dkv" path="res://main/gui_layer/scene_panel/palette_picker/color_button.tscn" id="2_mfhpa"]
+
+[node name="PalettePicker" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1854.0
+offset_bottom = -1014.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_dswfu")
+theme_type_variation = &"PalettePickerPanel"
+script = ExtResource("1_kufif")
+
+[node name="ButtonContainer" type="HFlowContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ColorButton" parent="ButtonContainer" instance=ExtResource("2_mfhpa")]
+layout_mode = 2
+button_pressed = true

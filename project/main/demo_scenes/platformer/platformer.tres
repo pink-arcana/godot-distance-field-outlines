@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="DemoScene" load_steps=4 format=3 uid="uid://vst73ju71nug"]
+
+[ext_resource type="Script" path="res://shared_dependencies/df_outline_settings.gd" id="1_gdrsr"]
+[ext_resource type="Script" path="res://main/demo_scenes/demo_scene.gd" id="1_rem2n"]
+
+[sub_resource type="Resource" id="Resource_6yiy1"]
+script = ExtResource("1_gdrsr")
+outline_width = 8
+viewport_size = Vector2i(1920, 1080)
+reset_viewport_size = false
+sobel_threshold = 0.25
+outline_effect = 0
+outline_color = Color(0, 0, 0, 1)
+background_color = Color(1, 1, 1, 1)
+use_background_color = false
+smoothing_distance = 1.5
+depth_fade_mode = 0
+depth_fade_start = 4.0
+depth_fade_end = 40.0
+min_outline_width = 4.0
+min_outline_alpha = 0.0
+
+[resource]
+script = ExtResource("1_rem2n")
+demo_type = 1
+base_scene_path = "res://main/demo_scenes/platformer/platformer.tscn"
+compositor_effect_scene_path = "res://main/demo_scenes/platformer/platformer_ce.tscn"
+node_scene_path = "res://main/demo_scenes/platformer/platformer_node.tscn"
+display_name = "Platformer"
+description = "Models from Quaternius's [url=https://quaternius.com/packs/ultimateplatformer.html]Platformer Game Kit[/url] and [url=https://quaternius.com/packs/ultimatefantasyrts.html]Ultimate Fantasy RTS[/url] (CC0). [url=https://lospec.com/palette-list/punolite-plus-plus]Punolite Plus Plus[/url] palette."
+outline_palette = "(0.1804, 0.1804, 0.2627, 1);(0.2902, 0.2941, 0.3569, 1);(0.4392, 0.4824, 0.5373, 1);(0.6627, 0.7373, 0.749, 1);(0.902, 0.9333, 0.9294, 1);(0.9882, 0.9843, 0.9529, 1);(0.9882, 0.9216, 0.6588, 1);(0.9608, 0.7686, 0.4863, 1);(0.8902, 0.5922, 0.3922, 1);(0.7529, 0.4078, 0.3216, 1);(0.6157, 0.2627, 0.2627, 1);(0.5059, 0.2118, 0.2706, 1);(0.3294, 0.1333, 0.251, 1);(0.1647, 0.0824, 0.1765, 1);(0.3098, 0.1765, 0.302, 1);(0.3569, 0.2275, 0.3373, 1);(0.4745, 0.3059, 0.4275, 1);(0.2431, 0.298, 0.4941, 1);(0.2863, 0.3725, 0.5804, 1);(0.3529, 0.4706, 0.698, 1);(0.451, 0.5882, 0.8353, 1);(0.498, 0.7333, 0.8627, 1);(0.6667, 0.9333, 0.9176, 1);(0.8353, 0.9725, 0.5765, 1);(0.5882, 0.8627, 0.498, 1);(0.4314, 0.7529, 0.4667, 1);(0.3059, 0.5765, 0.3882, 1);(0.2353, 0.4235, 0.3294, 1);(0.1725, 0.3137, 0.2863, 1);(0.2039, 0.251, 0.3098, 1);(0.251, 0.349, 0.4039, 1);(0.3608, 0.5373, 0.5843, 1)"
+background_palette = "(0.1804, 0.1804, 0.2627, 1);(0.2902, 0.2941, 0.3569, 1);(0.4392, 0.4824, 0.5373, 1);(0.6627, 0.7373, 0.749, 1);(0.902, 0.9333, 0.9294, 1);(0.9882, 0.9843, 0.9529, 1);(0.9882, 0.9216, 0.6588, 1);(0.9608, 0.7686, 0.4863, 1);(0.8902, 0.5922, 0.3922, 1);(0.7529, 0.4078, 0.3216, 1);(0.6157, 0.2627, 0.2627, 1);(0.5059, 0.2118, 0.2706, 1);(0.3294, 0.1333, 0.251, 1);(0.1647, 0.0824, 0.1765, 1);(0.3098, 0.1765, 0.302, 1);(0.3569, 0.2275, 0.3373, 1);(0.4745, 0.3059, 0.4275, 1);(0.2431, 0.298, 0.4941, 1);(0.2863, 0.3725, 0.5804, 1);(0.3529, 0.4706, 0.698, 1);(0.451, 0.5882, 0.8353, 1);(0.498, 0.7333, 0.8627, 1);(0.6667, 0.9333, 0.9176, 1);(0.8353, 0.9725, 0.5765, 1);(0.5882, 0.8627, 0.498, 1);(0.4314, 0.7529, 0.4667, 1);(0.3059, 0.5765, 0.3882, 1);(0.2353, 0.4235, 0.3294, 1);(0.1725, 0.3137, 0.2863, 1);(0.2039, 0.251, 0.3098, 1);(0.251, 0.349, 0.4039, 1);(0.3608, 0.5373, 0.5843, 1)"
+default_settings = SubResource("Resource_6yiy1")

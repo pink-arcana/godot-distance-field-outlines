@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxnt2vfgj6m6d"]
+
+[ext_resource type="PackedScene" uid="uid://525owkemmwph" path="res://main/demo_scenes/platformer/platformer.tscn" id="1_gqdip"]
+[ext_resource type="Script" path="res://df_outline_ce/df_outline_ce.gd" id="2_n1bsa"]
+[ext_resource type="Script" path="res://shared_dependencies/df_outline_settings.gd" id="2_vymfd"]
+
+[sub_resource type="Resource" id="Resource_ap3gw"]
+script = ExtResource("2_vymfd")
+outline_width = 8
+viewport_size = Vector2i(1920, 1080)
+reset_viewport_size = false
+sobel_threshold = 0.25
+outline_effect = 0
+outline_color = Color(0, 0, 0, 1)
+background_color = Color(1, 1, 1, 1)
+use_background_color = true
+smoothing_distance = 1.5
+depth_fade_mode = 0
+depth_fade_start = 4.0
+depth_fade_end = 40.0
+min_outline_width = 4.0
+min_outline_alpha = 0.0
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_8dpe4"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("2_n1bsa")
+outline_settings = SubResource("Resource_ap3gw")
+print_jfa_updates = false
+
+[sub_resource type="Compositor" id="Compositor_1xa5a"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_8dpe4")])
+
+[node name="PlatformerCE" type="Node3D"]
+
+[node name="Platformer" parent="." instance=ExtResource("1_gqdip")]
+
+[node name="CameraGimbal" parent="Platformer" index="1"]
+min_zoom = 2.0
+
+[node name="GimbalY" parent="Platformer/CameraGimbal" index="0"]
+transform = Transform3D(12.9997, 0, -0.0841766, 0, 13, 0, 0.0841766, 0, 12.9997, 0, 0, 0)
+
+[node name="GimbalX" parent="Platformer/CameraGimbal/GimbalY" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.980615, 0.195946, 0, -0.195946, 0.980615, 0, 0, 0)
+
+[node name="Camera3D" parent="Platformer/CameraGimbal/GimbalY/GimbalX" index="0" groups=["DFCamera"]]
+compositor = SubResource("Compositor_1xa5a")
+
+[editable path="Platformer"]
+[editable path="Platformer/CameraGimbal"]

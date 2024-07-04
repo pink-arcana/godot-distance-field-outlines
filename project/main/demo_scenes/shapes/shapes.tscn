@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://dinqe1tl7w3xi"]
+
+[ext_resource type="PackedScene" uid="uid://dm6aoxuoworld" path="res://main/demo_scenes/shapes/assets/shapes.glb" id="1_facro"]
+[ext_resource type="PackedScene" uid="uid://dcqyhx7npm1ta" path="res://main/demo_scenes/shared/camera_gimbal.tscn" id="1_yjn3v"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_634qx"]
+sky_top_color = Color(0.736731, 0.920662, 0.999235, 1)
+sky_horizon_color = Color(0.882594, 0.962643, 0.951438, 1)
+ground_bottom_color = Color(0.793644, 0.929909, 0.806516, 1)
+ground_horizon_color = Color(0.882594, 0.962643, 0.951438, 1)
+
+[sub_resource type="Sky" id="Sky_sare1"]
+sky_material = SubResource("ProceduralSkyMaterial_634qx")
+
+[sub_resource type="Environment" id="Environment_k4dd8"]
+background_mode = 1
+background_color = Color(1, 0.862745, 0.345098, 1)
+sky = SubResource("Sky_sare1")
+sky_custom_fov = 106.5
+ambient_light_source = 1
+reflected_light_source = 1
+
+[node name="ShapesScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_k4dd8")
+
+[node name="shapes" parent="." instance=ExtResource("1_facro")]
+
+[node name="CameraGimbal" parent="." instance=ExtResource("1_yjn3v")]
+default_y_rotation = 12.736
+default_x_rotation = -13.621
+default_zoom = 3.15
+
+[node name="GimbalY" parent="CameraGimbal" index="0"]
+transform = Transform3D(3.0725, 0, 0.694446, 0, 3.15, 0, -0.694446, 0, 3.0725, 0, 0, 0)
+
+[node name="GimbalX" parent="CameraGimbal/GimbalY" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.971875, 0.235498, 0, -0.235498, 0.971875, 0, 0, 0)
+
+[editable path="CameraGimbal"]

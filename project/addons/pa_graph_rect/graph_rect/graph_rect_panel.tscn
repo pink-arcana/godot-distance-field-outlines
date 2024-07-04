@@ -1,0 +1,130 @@
+[gd_scene load_steps=3 format=3 uid="uid://besujnnp6m4y1"]
+
+[ext_resource type="Script" path="res://addons/pa_graph_rect/graph_rect/graph_rect_plot.gd" id="1_amjnb"]
+[ext_resource type="Script" path="res://addons/pa_graph_rect/graph_rect/rotated_container.gd" id="2_d1vwy"]
+
+[node name="GraphRectPanel" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 3
+
+[node name="Control4" type="Control" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/GridContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"GraphRectTitleLabel"
+text = "Chart Title"
+
+[node name="Control5" type="Control" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/GridContainer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.0
+offset_top = -12.0
+offset_right = 28.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5708
+script = ExtResource("2_d1vwy")
+
+[node name="YAxisLabel" type="Label" parent="VBoxContainer/GridContainer/Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"GraphRectAxisLabel"
+text = "Y Axis"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Plot" type="Control" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_amjnb")
+
+[node name="LegendContainer" type="PanelContainer" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="LegendGridContainer" type="GridContainer" parent="VBoxContainer/GridContainer/LegendContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/GridContainer/LegendContainer/LegendGridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+color = Color(1, 0.17, 0.17, 1)
+
+[node name="Label" type="Label" parent="VBoxContainer/GridContainer/LegendContainer/LegendGridContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Series A"
+autowrap_mode = 3
+
+[node name="ColorRect2" type="ColorRect" parent="VBoxContainer/GridContainer/LegendContainer/LegendGridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+color = Color(0.184805, 0.610512, 0.719566, 1)
+
+[node name="Label3" type="Label" parent="VBoxContainer/GridContainer/LegendContainer/LegendGridContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Series B"
+autowrap_mode = 3
+
+[node name="Control2" type="Control" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Control3" type="Control" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="XAxisLabel" type="Label" parent="VBoxContainer/GridContainer/Control3"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.5
+offset_top = -9.5
+offset_right = 22.5
+offset_bottom = 9.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"GraphRectAxisLabel"
+text = "X Axis"
+horizontal_alignment = 1

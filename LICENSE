@@ -1,6 +1,53 @@
-MIT License
+This project contains assets used under the following licenses.
+The remainder of the project is available under the MIT license below.
 
-Copyright (c) 2024 pink-arcana
+### Platformer demo scene
+Platformer Game Kit: https://quaternius.com/packs/ultimateplatformer.html
+Ultimate Fantasy RTS: https://quaternius.com/packs/ultimatefantasyrts.html
+Copyright (c) Quaternius.
+CC0 1.0 Universal: https://creativecommons.org/publicdomain/zero/1.0/
+
+### Splashscreen
+Godot SplashScreens: https://github.com/KenneyNL/Godot-SplashScreens
+Copyright (c) Kenney (CC0 1.0)
+Godot logo is copyright (c) Andrea Calabró (CC-BY-4.0: https://github.com/godotengine/godot/blob/master/LOGO_LICENSE.txt)
+
+### PerformanceMonitor plugin is based on:
+Debug Menu Plugin: https://github.com/godot-extended-libraries/godot-debug-menu
+Copyright (c) 2023-present Hugo Locurcio and contributors.
+MIT license: https://github.com/godot-extended-libraries/godot-debug-menu/blob/master/LICENSE.md
+
+### Icons
+Input Prompts: https://juliocacko.itch.io/free-input-prompts
+Copyright (c) Julio Cacko.
+CC0 1.0 Universal: https://creativecommons.org/publicdomain/zero/1.0/
+
+Eva Icons: https://akveo.github.io/eva-icons
+Copyright (c) 2018 Akveo.
+MIT license: https://github.com/akveo/eva-icons/blob/master/LICENSE.txt
+
+Bootstrap Icons: https://icons.getbootstrap.com/
+Copyright (c) 2019-2024 The Bootstrap Authors.
+MIT license: https://github.com/twbs/icons/blob/main/LICENSE
+
+Godot editor icons
+Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md).
+Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.
+MIT license: https://github.com/godotengine/godot/blob/master/LICENSE.txt
+
+### Fonts
+Roboto: https://fonts.google.com/specimen/Roboto/about
+Designed by Christian Robertson
+Apache license: https://www.apache.org/licenses/LICENSE-2.0
+
+Staatliches: https://fonts.google.com/specimen/Staatliches/about
+Designed by Brian LaRossa, Erica Carras
+Open Font License: https://openfontlicense.org/
+
+### Distance Field Outlines project
+The remainder of this project is available under the following MIT license:
+
+Copyright (c) 2024 Pink Arcana.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

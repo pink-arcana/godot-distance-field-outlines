@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://elv7i1a3al8k"]
+
+[ext_resource type="Theme" uid="uid://txqpy04th48y" path="res://main/theme/menu_theme.tres" id="1_2vauf"]
+[ext_resource type="Script" path="res://main/gui_layer/menu_panel/menu_panel.gd" id="1_kwjbu"]
+[ext_resource type="PackedScene" uid="uid://nrfug53aanpb" path="res://main/gui_layer/reset_camera_button.tscn" id="2_0thwf"]
+
+[node name="MenuPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(300, 0)
+theme = ExtResource("1_2vauf")
+script = ExtResource("1_kwjbu")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="ResetCameraButton" parent="HBoxContainer" instance=ExtResource("2_0thwf")]
+layout_mode = 2
+text = "RESET CAMERA"
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ThemeScaleContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="DecreaseUIScaleButton" type="Button" parent="HBoxContainer/ThemeScaleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Decrease UI scale"
+text = "-"
+
+[node name="IncreaseUIScaleButton" type="Button" parent="HBoxContainer/ThemeScaleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Increase UI scale"
+text = "+"

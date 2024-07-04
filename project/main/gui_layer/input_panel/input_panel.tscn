@@ -1,0 +1,454 @@
+[gd_scene load_steps=16 format=3 uid="uid://nopqqak6pxr2"]
+
+[ext_resource type="PackedScene" uid="uid://b38of36pw26wi" path="res://main/theme/styleboxes/header_button/header_button.tscn" id="1_o8qbt"]
+[ext_resource type="Texture2D" uid="uid://bkn58f178d62v" path="res://main/gui_layer/input_panel/input_icons/mouse_move.png" id="2_7kati"]
+[ext_resource type="Texture2D" uid="uid://djkfxak6v05di" path="res://main/gui_layer/input_panel/input_icons/mouse_scroll.png" id="3_6p7uy"]
+[ext_resource type="Texture2D" uid="uid://bfq4atskhn6ww" path="res://main/gui_layer/input_panel/input_icons/key_w.png" id="4_uubnd"]
+[ext_resource type="Texture2D" uid="uid://ctkuy23hwm1gy" path="res://main/gui_layer/input_panel/input_icons/key_a.png" id="5_gkfv7"]
+[ext_resource type="Texture2D" uid="uid://s7vxyf7l0ykg" path="res://main/gui_layer/input_panel/input_icons/key_s.png" id="6_ecd5y"]
+[ext_resource type="Texture2D" uid="uid://b7vx1eamrnj5m" path="res://main/gui_layer/input_panel/input_icons/key_d.png" id="7_gx41l"]
+[ext_resource type="Texture2D" uid="uid://bmrodb86rs2q6" path="res://main/gui_layer/input_panel/input_icons/key_arrow_up.png" id="8_ffw73"]
+[ext_resource type="Texture2D" uid="uid://jyc4qfwntrl4" path="res://main/gui_layer/input_panel/input_icons/key_arrow_left.png" id="9_6nhvm"]
+[ext_resource type="Texture2D" uid="uid://bpilux6dw3st1" path="res://main/gui_layer/input_panel/input_icons/key_arrow_down.png" id="10_as30j"]
+[ext_resource type="Texture2D" uid="uid://bl8n20eroukv3" path="res://main/gui_layer/input_panel/input_icons/key_arrow_right.png" id="11_7mkdd"]
+[ext_resource type="Texture2D" uid="uid://btyhqv5g18mmq" path="res://main/gui_layer/input_panel/input_icons/key_q.png" id="12_l5rsq"]
+[ext_resource type="Texture2D" uid="uid://cct8tsl8wak5d" path="res://main/gui_layer/input_panel/input_icons/key_e.png" id="13_27yw7"]
+[ext_resource type="Texture2D" uid="uid://xf3y8hjjn8q8" path="res://main/gui_layer/input_panel/input_icons/key_minus.png" id="14_niu7t"]
+[ext_resource type="Texture2D" uid="uid://75q361hqfq6l" path="res://main/gui_layer/input_panel/input_icons/key_plus.png" id="15_oi0bp"]
+
+[node name="InputPanel" type="MarginContainer"]
+offset_right = 723.0
+offset_bottom = 394.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="PanelVBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"PanelVBox"
+
+[node name="HeaderButton" parent="PanelVBox" node_paths=PackedStringArray("minimize_control") instance=ExtResource("1_o8qbt")]
+layout_mode = 2
+button_pressed = false
+minimize_control = NodePath("../PanelContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelVBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Mouse" type="HBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"PalettePickerPanel"
+
+[node name="MouseRotate" type="VBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer/MouseRotate"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HeaderLabel"
+text = "Rotate"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer/MouseRotate"]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect2" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer/MouseRotate/HBoxContainer"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("2_7kati")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer/MouseRotate"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Press any button and move"
+horizontal_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"PalettePickerPanel"
+
+[node name="MouseZoom" type="VBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer2"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer2/MouseZoom"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HeaderLabel"
+text = "Zoom"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer2/MouseZoom"]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer2/MouseZoom/HBoxContainer"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("3_6p7uy")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Mouse/PanelContainer2/MouseZoom"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Scroll with middle button"
+horizontal_alignment = 1
+
+[node name="Keyboard" type="HBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"PalettePickerPanel"
+
+[node name="RotateHorizontal" type="VBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HeaderLabel"
+text = "Rotate Left/Right"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal"]
+layout_mode = 2
+
+[node name="WASD" type="GridContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/h_separation = -4
+theme_override_constants/v_separation = -4
+columns = 3
+
+[node name="Control" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/WASD"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("4_uubnd")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Control2" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/WASD"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/WASD"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("5_gkfv7")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("6_ecd5y")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/WASD"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("7_gx41l")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer"]
+layout_mode = 2
+text = "or"
+
+[node name="Arrows2" type="GridContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/h_separation = -4
+theme_override_constants/v_separation = -4
+columns = 3
+
+[node name="Control" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/Arrows2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/Arrows2"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("8_ffw73")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Control2" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/Arrows2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/Arrows2"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("9_6nhvm")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/Arrows2"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("10_as30j")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer2/RotateHorizontal/HBoxContainer/Arrows2"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("11_7mkdd")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="PanelContainer3" type="PanelContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"PalettePickerPanel"
+
+[node name="RotateVertical" type="VBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HeaderLabel"
+text = "Rotate Back/Forward"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical"]
+layout_mode = 2
+
+[node name="WASD" type="GridContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/h_separation = -4
+theme_override_constants/v_separation = -4
+columns = 3
+
+[node name="TextureRect" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/WASD"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("12_l5rsq")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect5" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("4_uubnd")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect6" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/WASD"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("13_27yw7")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("5_gkfv7")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("6_ecd5y")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("7_gx41l")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer"]
+layout_mode = 2
+text = "or"
+
+[node name="Arrows2" type="GridContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/h_separation = -4
+theme_override_constants/v_separation = -4
+columns = 3
+
+[node name="TextureRect3" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/Arrows2"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("14_niu7t")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer3/RotateVertical/HBoxContainer/Arrows2"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("15_oi0bp")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"PalettePickerPanel"
+
+[node name="Zoom" type="VBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HeaderLabel"
+text = "Zoom"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom"]
+layout_mode = 2
+
+[node name="WASD" type="GridContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/h_separation = -4
+theme_override_constants/v_separation = -4
+columns = 3
+
+[node name="Control" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/WASD"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/WASD"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("4_uubnd")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Control2" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/WASD"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("5_gkfv7")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/WASD"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("6_ecd5y")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/WASD"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("7_gx41l")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer"]
+layout_mode = 2
+text = "or"
+
+[node name="Arrows2" type="GridContainer" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/h_separation = -4
+theme_override_constants/v_separation = -4
+columns = 3
+
+[node name="Control" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/Arrows2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/Arrows2"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("8_ffw73")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Control2" type="Control" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/Arrows2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/Arrows2"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("9_6nhvm")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/Arrows2"]
+modulate = Color(0.980392, 0.87451, 0.0470588, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("10_as30j")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelVBox/PanelContainer/VBoxContainer/Keyboard/PanelContainer/Zoom/HBoxContainer/Arrows2"]
+modulate = Color(0.941176, 0.964706, 0.941176, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("11_7mkdd")
+expand_mode = 3
+stretch_mode = 5

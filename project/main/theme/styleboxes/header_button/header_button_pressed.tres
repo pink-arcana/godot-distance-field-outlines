@@ -1,0 +1,13 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://mwxpw2naa6y3"]
+
+[ext_resource type="Texture2D" uid="uid://c5c0donf7rfpr" path="res://main/theme/textures/button_round_shadow_dark.png" id="1_y4f6c"]
+
+[resource]
+content_margin_top = 12.0
+content_margin_bottom = 16.0
+texture = ExtResource("1_y4f6c")
+texture_margin_left = 17.0
+texture_margin_top = 17.0
+texture_margin_right = 22.0
+texture_margin_bottom = 21.0
+expand_margin_bottom = 36.0

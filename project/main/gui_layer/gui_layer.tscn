@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://bfn08yty6e2yu"]
+
+[ext_resource type="Script" path="res://main/gui_layer/gui_layer.gd" id="1_ootin"]
+[ext_resource type="PackedScene" uid="uid://c2ifhahk66bwe" path="res://main/gui_layer/fps_panel/fps_panel.tscn" id="2_1vkrt"]
+[ext_resource type="PackedScene" uid="uid://nfsnvlt86qnl" path="res://main/gui_layer/scene_panel/scene_panel.tscn" id="5_4wxqt"]
+[ext_resource type="Theme" uid="uid://txqpy04th48y" path="res://main/theme/menu_theme.tres" id="6_q7kgy"]
+[ext_resource type="PackedScene" uid="uid://nopqqak6pxr2" path="res://main/gui_layer/input_panel/input_panel.tscn" id="7_gfhmq"]
+[ext_resource type="PackedScene" uid="uid://pcdu5w7j88he" path="res://main/gui_layer/exit_button.tscn" id="7_y1vsh"]
+[ext_resource type="PackedScene" uid="uid://dko32kxa0pfia" path="res://main/gui_layer/project_panel/project_panel.tscn" id="9_k85nb"]
+[ext_resource type="PackedScene" uid="uid://elv7i1a3al8k" path="res://main/gui_layer/menu_panel/menu_panel.tscn" id="10_18248"]
+
+[node name="GUILayer" type="CanvasLayer"]
+layer = 128
+script = ExtResource("1_ootin")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Control" type="Control" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LeftVBox" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+alignment = 2
+
+[node name="ScenePanel" parent="MarginContainer/LeftVBox" instance=ExtResource("5_4wxqt")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ProjectPanel" parent="MarginContainer/LeftVBox" instance=ExtResource("9_k85nb")]
+layout_mode = 2
+
+[node name="RightVBox" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="MenuPanel" parent="MarginContainer/RightVBox" instance=ExtResource("10_18248")]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="FPSPanel" parent="MarginContainer/RightVBox" instance=ExtResource("2_1vkrt")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="InputPanel" parent="MarginContainer/RightVBox" instance=ExtResource("7_gfhmq")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/RightVBox"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="ExitPanel" type="PanelContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme = ExtResource("6_q7kgy")
+
+[node name="ExitButton" parent="MarginContainer/ExitPanel" instance=ExtResource("7_y1vsh")]
+layout_mode = 2

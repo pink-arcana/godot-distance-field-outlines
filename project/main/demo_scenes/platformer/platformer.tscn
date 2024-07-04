@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://525owkemmwph"]
+
+[ext_resource type="Script" path="res://main/demo_scenes/platformer/platformer.gd" id="1_fsdp3"]
+[ext_resource type="Environment" uid="uid://6ybggyaideph" path="res://main/demo_scenes/platformer/env_compatibility.tres" id="2_0bxb4"]
+[ext_resource type="PackedScene" uid="uid://dcqyhx7npm1ta" path="res://main/demo_scenes/shared/camera_gimbal.tscn" id="2_8ofr1"]
+[ext_resource type="Environment" uid="uid://dvcks7b5br6jm" path="res://main/demo_scenes/platformer/env.tres" id="2_awp83"]
+[ext_resource type="PackedScene" uid="uid://cevxvtdwhlggs" path="res://main/demo_scenes/platformer/assets/platformer.glb" id="2_hpl7p"]
+
+[node name="Platformer" type="Node3D"]
+script = ExtResource("1_fsdp3")
+sky_forward = ExtResource("2_awp83")
+sky_compatibility = ExtResource("2_0bxb4")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+unique_name_in_owner = true
+environment = ExtResource("2_0bxb4")
+
+[node name="CameraGimbal" parent="." instance=ExtResource("2_8ofr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.69922, 0)
+default_y_rotation = -0.371
+default_x_rotation = -11.3
+default_zoom = 13.0
+min_zoom = 2.0
+max_zoom = 25.0
+
+[node name="GimbalY" parent="CameraGimbal" index="0"]
+transform = Transform3D(12.9997, 0, -0.0841766, 0, 13, 0, 0.0841766, 0, 12.9997, 0, 0, 0)
+
+[node name="GimbalX" parent="CameraGimbal/GimbalY" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.980615, 0.195946, 0, -0.195946, 0.980615, 0, 0, 0)
+
+[node name="Camera3D" parent="CameraGimbal/GimbalY/GimbalX" index="0"]
+far = 150.0
+
+[node name="platformer" parent="." instance=ExtResource("2_hpl7p")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6489, 16.0971, 20.2885)
+omni_range = 30.0
+omni_attenuation = 0.686
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.351, 10.7825, -0.413659)
+omni_range = 30.0
+omni_attenuation = 0.686
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.952, 15.9131, -1.0893)
+omni_range = 30.0
+omni_attenuation = 0.47
+
+[editable path="CameraGimbal"]

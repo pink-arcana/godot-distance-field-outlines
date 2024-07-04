@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="DemoScene" load_steps=4 format=3 uid="uid://b3t17wclp4jew"]
+
+[ext_resource type="Script" path="res://shared_dependencies/df_outline_settings.gd" id="1_cx06x"]
+[ext_resource type="Script" path="res://main/demo_scenes/demo_scene.gd" id="1_wv6ix"]
+
+[sub_resource type="Resource" id="Resource_ad4rm"]
+script = ExtResource("1_cx06x")
+outline_width = 8
+viewport_size = Vector2i(1920, 1080)
+reset_viewport_size = false
+sobel_threshold = 0.01
+outline_effect = 0
+outline_color = Color(0, 0, 0, 1)
+background_color = Color(1, 1, 1, 1)
+use_background_color = false
+smoothing_distance = 1.5
+depth_fade_mode = 0
+depth_fade_start = 4.0
+depth_fade_end = 40.0
+min_outline_width = 4.0
+min_outline_alpha = 0.0
+
+[resource]
+script = ExtResource("1_wv6ix")
+demo_type = 1
+base_scene_path = "res://main/demo_scenes/shapes/shapes.tscn"
+compositor_effect_scene_path = "res://main/demo_scenes/shapes/shapes_ce.tscn"
+node_scene_path = "res://main/demo_scenes/shapes/shapes_node.tscn"
+display_name = "Simple Shapes"
+description = "Color palette adapted from [url=https://lospec.com/palette-list/lospec500] Lospec500[/url]."
+outline_palette = "(0, 0, 0, 1);(0.1725, 0.1176, 0.1922, 1);(0.4941, 0.1765, 0.2863, 1);(0.7569, 0.1765, 0.2745, 1);(0.9333, 0.2431, 0.2824, 1);(0.1176, 0.251, 0.2667, 1);(0, 0.3961, 0.3294, 1);(0.149, 0.5216, 0.298, 1);(0.3529, 0.7098, 0.3216, 1);(0.6157, 0.902, 0.3059, 1);(0.2431, 0.2314, 0.3961, 1);(0.2196, 0.349, 0.702, 1);(0.2, 0.5333, 0.8706, 1);(0.2118, 0.7725, 0.9569, 1);(1,1,1,1)"
+background_palette = "(0, 0, 0, 1);(0.1725, 0.1176, 0.1922, 1);(0.4941, 0.1765, 0.2863, 1);(0.7569, 0.1765, 0.2745, 1);(0.9333, 0.2431, 0.2824, 1);(0.1176, 0.251, 0.2667, 1);(0, 0.3961, 0.3294, 1);(0.149, 0.5216, 0.298, 1);(0.3529, 0.7098, 0.3216, 1);(0.6157, 0.902, 0.3059, 1);(0.2431, 0.2314, 0.3961, 1);(0.2196, 0.349, 0.702, 1);(0.2, 0.5333, 0.8706, 1);(0.2118, 0.7725, 0.9569, 1);(1,1,1,1)"
+default_settings = SubResource("Resource_ad4rm")

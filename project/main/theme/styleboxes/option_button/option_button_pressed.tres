@@ -1,0 +1,12 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://dkxvpusaluaqr"]
+
+[ext_resource type="Texture2D" uid="uid://vrvqidm18iv6" path="res://main/theme/textures/button_rect_shadow_pressed.png" id="1_vj8wu"]
+
+[resource]
+content_margin_left = 19.0
+content_margin_top = 9.0
+texture = ExtResource("1_vj8wu")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0

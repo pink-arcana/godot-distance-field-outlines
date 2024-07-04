@@ -1,0 +1,345 @@
+[gd_scene load_steps=17 format=3 uid="uid://nfsnvlt86qnl"]
+
+[ext_resource type="Script" path="res://main/gui_layer/scene_panel/scene_panel.gd" id="1_7rj7x"]
+[ext_resource type="ButtonGroup" uid="uid://cq0556csxtbf0" path="res://main/gui_layer/scene_panel/scene_type_button_group.tres" id="1_y3p1w"]
+[ext_resource type="Script" path="res://main/demo_scenes/demo_scene.gd" id="2_2bpat"]
+[ext_resource type="Resource" uid="uid://vst73ju71nug" path="res://main/demo_scenes/platformer/platformer.tres" id="3_waold"]
+[ext_resource type="Resource" uid="uid://b3t17wclp4jew" path="res://main/demo_scenes/shapes/shapes.tres" id="4_ts1nn"]
+[ext_resource type="PackedScene" uid="uid://b38of36pw26wi" path="res://main/theme/styleboxes/header_button/header_button.tscn" id="5_33ydn"]
+[ext_resource type="FontFile" uid="uid://b5bn0de57lpjo" path="res://main/theme/fonts/staatliches/staatliches_regular.ttf" id="6_r8ata"]
+[ext_resource type="PackedScene" uid="uid://h5t4lo0sos4" path="res://main/gui_layer/scene_panel/palette_picker/palette_picker.tscn" id="10_3pqtp"]
+[ext_resource type="Script" path="res://main/gui_layer/scene_panel/outline_settings_container.gd" id="10_67kq6"]
+[ext_resource type="Texture2D" uid="uid://dyryq8cfhyo4t" path="res://main/theme/icons/type_node.svg" id="11_104y2"]
+[ext_resource type="Texture2D" uid="uid://ba1isrf8ro2eg" path="res://main/theme/icons/reset.png" id="12_dhheb"]
+[ext_resource type="Texture2D" uid="uid://defrb2osff5ot" path="res://main/theme/icons/type_ce.svg" id="12_xtaq7"]
+[ext_resource type="Script" path="res://main/theme/icon_button.gd" id="13_v3xft"]
+[ext_resource type="Texture2D" uid="uid://bk863p43mvdc7" path="res://main/theme/icons/reset_hover.png" id="14_kgtrx"]
+[ext_resource type="Texture2D" uid="uid://tsw73q1mtik5" path="res://main/theme/icons/reset_pressed.png" id="15_rq2kj"]
+[ext_resource type="Script" path="res://main/theme/checkbox_button.gd" id="15_vqoi1"]
+
+[node name="ScenePanel" type="MarginContainer"]
+clip_children = 2
+clip_contents = true
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 700.0
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+script = ExtResource("1_7rj7x")
+demo_scenes = Array[ExtResource("2_2bpat")]([ExtResource("3_waold"), ExtResource("4_ts1nn")])
+
+[node name="PanelVBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"PanelVBox"
+
+[node name="HeaderButton" parent="PanelVBox" node_paths=PackedStringArray("minimize_control") instance=ExtResource("5_33ydn")]
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Toggle Scene panel."
+text = "Scene"
+icon_alignment = 2
+minimize_control = NodePath("../VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = -8
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelVBox/VBoxContainer"]
+custom_minimum_size = Vector2(700, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_r8ata")
+theme_override_font_sizes/font_size = 20
+text = "Demo:"
+
+[node name="DemoTypeButton" type="OptionButton" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select a demo type."
+selected = 0
+item_count = 1
+popup/item_0/text = "Distance Fields"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_r8ata")
+theme_override_font_sizes/font_size = 20
+text = "Scene:"
+
+[node name="SceneButton" type="OptionButton" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select a demo scene."
+selected = 0
+item_count = 1
+popup/item_0/text = "Martian Base"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = -16
+theme_override_constants/margin_right = 16
+
+[node name="SceneDescriptionLabel" type="RichTextLabel" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer3/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TextBlock"
+bbcode_enabled = true
+text = "Scene description."
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SceneTypeContainer" type="HBoxContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer/SceneTypeContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_r8ata")
+theme_override_font_sizes/font_size = 20
+text = "Outlines:"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer/SceneTypeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer/SceneTypeContainer/MarginContainer"]
+layout_mode = 2
+theme_type_variation = &"SwitchPanelContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer/SceneTypeContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BaseButton" type="Button" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer/SceneTypeContainer/MarginContainer/PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SwitchButton"
+toggle_mode = true
+button_group = ExtResource("1_y3p1w")
+text = "None"
+
+[node name="NodeButton" type="Button" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer/SceneTypeContainer/MarginContainer/PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SwitchButton"
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("1_y3p1w")
+text = "Node"
+icon = ExtResource("11_104y2")
+
+[node name="CEButton" type="Button" parent="PanelVBox/VBoxContainer/PanelContainer/VBoxContainer/VBoxContainer/SceneTypeContainer/MarginContainer/PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SwitchButton"
+toggle_mode = true
+button_group = ExtResource("1_y3p1w")
+text = "CompositorEffect"
+icon = ExtResource("12_xtaq7")
+
+[node name="OutlineSettingsContainer" type="PanelContainer" parent="PanelVBox/VBoxContainer" node_paths=PackedStringArray("top_panel", "scroll_container", "scroll_contents_container", "contents_container")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("10_67kq6")
+top_panel = NodePath("../PanelContainer")
+scroll_container = NodePath("ScrollContainer")
+scroll_contents_container = NodePath("ScrollContainer/MarginContainer")
+contents_container = NodePath("ScrollContainer/MarginContainer/VBoxContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="OutlineSettings" type="PanelContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"RoundedPanelContainer"
+
+[node name="GridContainer" type="GridContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+columns = 2
+
+[node name="Label2" type="Label" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "Effect"
+
+[node name="EffectContainer" type="HBoxContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="EffectButton" type="OptionButton" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer/EffectContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select an outline effect."
+selected = 0
+item_count = 1
+popup/item_0/text = "Effect name"
+
+[node name="ResetSettingsButton" type="Button" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer/EffectContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Apply default settings for the selected effect."
+theme_type_variation = &"IconButton"
+icon = ExtResource("12_dhheb")
+flat = true
+script = ExtResource("13_v3xft")
+normal_icon = ExtResource("12_dhheb")
+hover_icon = ExtResource("14_kgtrx")
+pressed_icon = ExtResource("15_rq2kj")
+
+[node name="Label" type="Label" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "Width"
+
+[node name="WidthContainer" type="HBoxContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="WidthSlider" type="HSlider" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer/WidthContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Change the outline width."
+min_value = 2.0
+max_value = 2048.0
+step = 2.0
+value = 32.0
+exp_edit = true
+
+[node name="WidthLabel" type="Label" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer/WidthContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer"]
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "Depth fade"
+
+[node name="DepthFade" type="HBoxContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="WidthFadeCheckbox" type="CheckBox" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer/DepthFade"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "As distance from the camera increases, decrease outline width."
+text = "Width"
+script = ExtResource("15_vqoi1")
+
+[node name="AlphaFadeCheckbox" type="CheckBox" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer/DepthFade"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "As distance from the camera increases, decrease outline transparency."
+text = "Transparency"
+script = ExtResource("15_vqoi1")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="OutlineColor" type="PanelContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"RoundedPanelContainer"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/OutlineColor"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label4" type="Label" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/OutlineColor/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "Outline"
+
+[node name="OutlinePalettePicker" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/OutlineColor/VBoxContainer" instance=ExtResource("10_3pqtp")]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select an outline color."
+setting_name = "outline_color"
+
+[node name="BackgroundColor" type="PanelContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"RoundedPanelContainer"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/BackgroundColor"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label5" type="Label" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/BackgroundColor/VBoxContainer2"]
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "Background"
+
+[node name="BackgroundPalettePicker" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/BackgroundColor/VBoxContainer2" instance=ExtResource("10_3pqtp")]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select a custom background color."
+setting_name = "background_color"
+
+[node name="WhiteBackgroundButton" type="CheckBox" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3/BackgroundColor/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Toggle using a custom background color."
+text = "Use background color"
+script = ExtResource("15_vqoi1")

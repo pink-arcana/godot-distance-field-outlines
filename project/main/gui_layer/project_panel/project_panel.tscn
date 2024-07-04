@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://dko32kxa0pfia"]
+
+[ext_resource type="Script" path="res://main/gui_layer/project_panel/project_panel.gd" id="1_wwwrq"]
+[ext_resource type="Texture2D" uid="uid://bjdmoispma7w2" path="res://main/theme/icons/header.svg" id="2_8s5o5"]
+
+[node name="ProjectPanel" type="PanelContainer"]
+offset_right = 392.0
+offset_bottom = 85.0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_type_variation = &"BlackPanelContainer"
+script = ExtResource("1_wwwrq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_top = 4
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture = ExtResource("2_8s5o5")
+stretch_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"OverlayLabel"
+text = "Distance Field Outlines"
+vertical_alignment = 2
+
+[node name="VersionLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"OverlayLabelLighter"
+text = "0.1.1"
+vertical_alignment = 2
+
+[node name="GithubURLLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"RichTextOverlay"
+bbcode_enabled = true
+text = "[url=https://github.com/pink-arcana/godot-distance-field-outlines]github.com/pink-arcana[/url] (MIT)"
+fit_content = true
+autowrap_mode = 0

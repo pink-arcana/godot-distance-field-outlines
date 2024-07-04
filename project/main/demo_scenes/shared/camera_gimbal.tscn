@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcqyhx7npm1ta"]
+
+[ext_resource type="Script" path="res://main/demo_scenes/shared/camera_gimbal.gd" id="1_smwga"]
+
+[node name="CameraGimbal" type="Node3D" groups=["CameraGimbal"]]
+script = ExtResource("1_smwga")
+
+[node name="GimbalY" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="GimbalX" type="Node3D" parent="GimbalY"]
+unique_name_in_owner = true
+
+[node name="Camera3D" type="Camera3D" parent="GimbalY/GimbalX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+current = true
+fov = 50.0
+far = 100.0

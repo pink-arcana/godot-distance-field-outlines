@@ -1,0 +1,34 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://c0syljmtm53vn"]
+
+[ext_resource type="FontFile" uid="uid://rl84423btu8g" path="res://main/theme/fonts/roboto/roboto-bold.ttf" id="2_rl75p"]
+[ext_resource type="FontFile" uid="uid://dj7toqnvorx6d" path="res://main/theme/fonts/roboto/roboto-medium.ttf" id="3_6cn64"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_twyjk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7rkht"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mj8rr"]
+
+[resource]
+GraphRect/base_type = &"Control"
+GraphRect/colors/axis = Color(0.133333, 0.137255, 0.137255, 1)
+GraphRect/colors/grid = Color(0.6336, 0.64, 0.64, 1)
+GraphRect/constants/axis_tick_size = 16
+GraphRect/constants/axis_width = 4
+GraphRect/constants/grid_width = 2
+GraphRect/constants/legend_spacing = 16
+GraphRect/constants/plot_margin = 5
+GraphRect/constants/series_dash_size = 10
+GraphRect/constants/series_width = 4
+GraphRect/styles/background = SubResource("StyleBoxEmpty_twyjk")
+GraphRect/styles/legend = SubResource("StyleBoxEmpty_7rkht")
+GraphRect/styles/plot = SubResource("StyleBoxEmpty_mj8rr")
+GraphRectAxisLabel/base_type = &"Label"
+GraphRectAxisLabel/colors/font_color = Color(0.133333, 0.137255, 0.137255, 1)
+GraphRectAxisLabel/fonts/font = ExtResource("2_rl75p")
+GraphRectLegendLabel/base_type = &"Label"
+GraphRectLegendLabel/colors/font_color = Color(0.133333, 0.137255, 0.137255, 1)
+GraphRectLegendLabel/fonts/font = ExtResource("3_6cn64")
+GraphRectTitleLabel/base_type = &"Label"
+GraphRectTitleLabel/colors/font_color = Color(0.133333, 0.137255, 0.137255, 1)
+GraphRectTitleLabel/fonts/font = ExtResource("2_rl75p")

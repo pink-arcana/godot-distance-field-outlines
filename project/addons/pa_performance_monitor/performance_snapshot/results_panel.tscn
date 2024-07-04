@@ -1,0 +1,76 @@
+[gd_scene load_steps=4 format=3 uid="uid://ca2i3dseb2ki1"]
+
+[ext_resource type="StyleBox" uid="uid://dk32sc7crch78" path="res://addons/pa_performance_monitor/performance_snapshot/panel.tres" id="1_l13hl"]
+[ext_resource type="Script" path="res://addons/pa_performance_monitor/performance_snapshot/results_panel.gd" id="1_m5ahu"]
+
+[sub_resource type="Theme" id="Theme_lwuhl"]
+default_font_size = 24
+
+[node name="ResultsPanel" type="PopupPanel"]
+title = "Results"
+size = Vector2i(480, 316)
+visible = true
+content_scale_mode = 1
+theme = SubResource("Theme_lwuhl")
+theme_override_styles/panel = ExtResource("1_l13hl")
+script = ExtResource("1_m5ahu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 464.0
+offset_bottom = 300.0
+theme_override_constants/separation = 32
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Title"
+
+[node name="DateTimeLabel" type="Label" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "DateTime"
+horizontal_alignment = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ContextContainer" type="GridContainer" parent="VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TimesContainer" type="GridContainer" parent="VBoxContainer/PanelContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 36
+alignment = 2
+
+[node name="OpenDirButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Open Screenshot Directory"
+
+[node name="CloseButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Close"

@@ -1,0 +1,138 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2ifhahk66bwe"]
+
+[ext_resource type="Script" path="res://main/gui_layer/fps_panel/fps_panel.gd" id="1_bf8qp"]
+[ext_resource type="PackedScene" uid="uid://b38of36pw26wi" path="res://main/theme/styleboxes/header_button/header_button.tscn" id="2_oaxav"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lvdui"]
+content_margin_right = 8.0
+
+[node name="FPSPanel" type="MarginContainer"]
+offset_right = 273.0
+offset_bottom = 248.0
+size_flags_vertical = 3
+script = ExtResource("1_bf8qp")
+
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[node name="PanelVBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"PanelVBox"
+
+[node name="HeaderButton" parent="PanelVBox" node_paths=PackedStringArray("minimize_control") instance=ExtResource("2_oaxav")]
+layout_mode = 2
+button_pressed = false
+text = "Performance"
+minimize_control = NodePath("../PanelContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelVBox/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="ContentPanel" type="PanelContainer" parent="PanelVBox/PanelContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lvdui")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ContextContainer" type="GridContainer" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"PalettePickerPanel"
+
+[node name="GridContainer" type="GridContainer" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 8
+columns = 3
+
+[node name="Label7" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+text = "FPS:"
+
+[node name="FPSLabel" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "354"
+
+[node name="Control" type="Control" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+text = "Frame:"
+
+[node name="TotalLabel" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "1.02 ms"
+
+[node name="TotalRangeLabel" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(0.32 - 2.61)"
+
+[node name="Label2" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+text = "CPU:"
+
+[node name="CPULabel" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "0.12 ms"
+
+[node name="CPURangeLabel" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(0.01 - 0.34)"
+
+[node name="Label3" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+text = "GPU:"
+
+[node name="GPULabel" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+text = "0.76 ms"
+
+[node name="GPURangeLabel" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer/PanelContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(0.01 - 0.34)"
+
+[node name="Label" type="Label" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Average of last 150 frames."
+horizontal_alignment = 1
+
+[node name="ProfileButton" type="Button" parent="PanelVBox/PanelContainer/ScrollContainer/ContentPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test Performance"
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

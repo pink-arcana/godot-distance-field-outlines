@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1becv1555gn7"]
+
+[ext_resource type="PackedScene" uid="uid://dinqe1tl7w3xi" path="res://main/demo_scenes/shapes/shapes.tscn" id="2_orfgq"]
+[ext_resource type="Script" path="res://shared_dependencies/df_outline_settings.gd" id="3_gfja8"]
+[ext_resource type="PackedScene" uid="uid://bofa5ksa8loil" path="res://df_outline_node/df_outline_node.tscn" id="3_ouq5k"]
+
+[sub_resource type="Resource" id="Resource_656wk"]
+script = ExtResource("3_gfja8")
+outline_width = 1024
+viewport_size = Vector2i(1920, 1080)
+reset_viewport_size = false
+sobel_threshold = 0.05
+outline_effect = 0
+outline_color = Color(0, 0, 0, 1)
+background_color = Color(1, 1, 1, 1)
+use_background_color = false
+smoothing_distance = 1.5
+depth_fade_mode = 0
+depth_fade_start = 4.0
+depth_fade_end = 40.0
+min_outline_width = 4.0
+min_outline_alpha = 0.0
+
+[node name="ShapesNodeDemo" type="Node3D"]
+
+[node name="ShapesScene" parent="." instance=ExtResource("2_orfgq")]
+
+[node name="GimbalY" parent="ShapesScene/CameraGimbal" index="0"]
+transform = Transform3D(3.0725, 0, 0.694446, 0, 3.15, 0, -0.694446, 0, 3.0725, 0, 0, 0)
+
+[node name="GimbalX" parent="ShapesScene/CameraGimbal/GimbalY" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.971875, 0.235498, 0, -0.235498, 0.971875, 0, 0, 0)
+
+[node name="DFOutlineNode" parent="." node_paths=PackedStringArray("scene_camera") groups=["DFNode"] instance=ExtResource("3_ouq5k")]
+scene_camera = NodePath("../ShapesScene/CameraGimbal/GimbalY/GimbalX/Camera3D")
+outline_settings = SubResource("Resource_656wk")
+
+[editable path="ShapesScene"]
+[editable path="ShapesScene/CameraGimbal"]

@@ -1,0 +1,31 @@
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://byq2b5g0yii0a"]
+
+[ext_resource type="StyleBox" uid="uid://cwk7tty6qknnv" path="res://main/theme/styleboxes/palette_picker/palette_picker_button_hover.tres" id="1_trd5s"]
+[ext_resource type="StyleBox" uid="uid://uayrqo4i6nmk" path="res://main/theme/styleboxes/palette_picker/palette_picker_button_pressed.tres" id="2_1pkv3"]
+[ext_resource type="StyleBox" uid="uid://sh2pl12uybj0" path="res://main/theme/styleboxes/palette_picker/palette_picker_button.tres" id="3_cgpt3"]
+[ext_resource type="StyleBox" uid="uid://cnonk1m7ihorj" path="res://main/theme/styleboxes/palette_picker/palette_picker_panel.tres" id="4_br2k2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7ggbj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_83ox5"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[resource]
+Button/constants/align_to_largest_stylebox = 1
+Button/styles/disabled = ExtResource("3_cgpt3")
+Button/styles/focus = SubResource("StyleBoxEmpty_7ggbj")
+Button/styles/hover = ExtResource("1_trd5s")
+Button/styles/hover_pressed = ExtResource("2_1pkv3")
+Button/styles/normal = ExtResource("3_cgpt3")
+Button/styles/pressed = ExtResource("2_1pkv3")
+PalettePickerButton/constants/align_to_largest_stylebox = 1
+PalettePickerButton/styles/focus = SubResource("StyleBoxFlat_83ox5")
+PalettePickerButton/styles/hover = ExtResource("1_trd5s")
+PalettePickerButton/styles/hover_pressed = ExtResource("2_1pkv3")
+PalettePickerButton/styles/normal = ExtResource("3_cgpt3")
+PalettePickerButton/styles/pressed = ExtResource("2_1pkv3")
+PalettePickerPanel/styles/panel = ExtResource("4_br2k2")

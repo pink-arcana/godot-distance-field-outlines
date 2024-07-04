@@ -1,0 +1,14 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://bv4rxor8oi5kt"]
+
+[ext_resource type="Texture2D" uid="uid://dfeuvucrknn6v" path="res://main/theme/textures/panel_shadow.png" id="1_rqiab"]
+
+[resource]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 30.0
+content_margin_bottom = 30.0
+texture = ExtResource("1_rqiab")
+texture_margin_left = 31.0
+texture_margin_top = 31.0
+texture_margin_right = 41.0
+texture_margin_bottom = 41.0

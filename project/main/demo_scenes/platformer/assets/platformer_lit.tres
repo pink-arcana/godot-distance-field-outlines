@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b5mqrmrhqkbco"]
+
+[ext_resource type="Texture2D" uid="uid://d1ww7ohtysfut" path="res://main/demo_scenes/platformer/assets/platformer_palette.png" id="1_gphar"]
+
+[resource]
+albedo_texture = ExtResource("1_gphar")

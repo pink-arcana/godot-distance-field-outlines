@@ -1,0 +1,152 @@
+[gd_scene load_steps=13 format=3 uid="uid://ds5s4lj0w3f7f"]
+
+[ext_resource type="Script" path="res://main/performance_layer/performance_layer.gd" id="1_br8ca"]
+[ext_resource type="FontFile" uid="uid://b5bn0de57lpjo" path="res://main/theme/fonts/staatliches/staatliches_regular.ttf" id="2_vt077"]
+[ext_resource type="Script" path="res://main/performance_layer/performance_tree.gd" id="2_wkc0i"]
+[ext_resource type="PackedScene" uid="uid://y5ktlg5jkbr2" path="res://main/performance_layer/info_panel.tscn" id="2_x1cdc"]
+[ext_resource type="Script" path="res://addons/pa_graph_rect/graph_rect/graph_rect.gd" id="3_62u5c"]
+[ext_resource type="Theme" uid="uid://c0syljmtm53vn" path="res://main/theme/graph_rect_theme.tres" id="3_a8dx1"]
+[ext_resource type="FontFile" uid="uid://dj7toqnvorx6d" path="res://main/theme/fonts/roboto/roboto-medium.ttf" id="5_3pa4v"]
+[ext_resource type="StyleBox" uid="uid://q0avgui1okoi" path="res://main/theme/styleboxes/tree/tree_button.tres" id="5_8f3lf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3fb05"]
+bg_color = Color(0.9702, 0.98, 0.9702, 0.419608)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1w4e7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghgod"]
+bg_color = Color(0.968627, 0.976471, 0.968627, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_elqfx"]
+
+[node name="PerformanceLayer" type="CanvasLayer"]
+layer = 128
+script = ExtResource("1_br8ca")
+base_color = Color(1, 0.690196, 0, 1)
+node_color = Color(0.392157, 0.560784, 1, 1)
+ce_color = Color(0.862745, 0.14902, 0.498039, 1)
+
+[node name="ProgressContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(800, 600)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3fb05")
+
+[node name="ResultsContainer" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 32
+
+[node name="ResultsPanel" type="PanelContainer" parent="ResultsContainer"]
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1w4e7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ResultsContainer/ResultsPanel"]
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="ResultsContainer/ResultsPanel/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"RoundedPanelContainer"
+
+[node name="Label" type="Label" parent="ResultsContainer/ResultsPanel/VBoxContainer/PanelContainer2"]
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_fonts/font = ExtResource("2_vt077")
+theme_override_font_sizes/font_size = 24
+text = "Average Frame Time by Outline Width, Node vs CompositorEffect"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ResultsContainer/ResultsPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InfoPanel" parent="ResultsContainer/ResultsPanel/VBoxContainer/HBoxContainer" instance=ExtResource("2_x1cdc")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"RoundedPanelContainer"
+
+[node name="GraphRectContainer" type="PanelContainer" parent="ResultsContainer/ResultsPanel/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_type_variation = &"RoundedPanelContainer"
+
+[node name="GraphRect" type="Control" parent="ResultsContainer/ResultsPanel/VBoxContainer/HBoxContainer/GraphRectContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme = ExtResource("3_a8dx1")
+script = ExtResource("3_62u5c")
+use_default_theme = false
+x_title = "Outline Width (pixels)"
+y_title = "Average Frame Time (ms)"
+y_max = 1.0
+y_grid_interval = 0.5
+
+[node name="PanelContainer" type="PanelContainer" parent="ResultsContainer/ResultsPanel/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"RoundedPanelContainer"
+
+[node name="ResultsTree" type="Tree" parent="ResultsContainer/ResultsPanel/VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/guide_color = Color(0.133333, 0.137255, 0.137255, 1)
+theme_override_colors/font_color = Color(0.133333, 0.137255, 0.137255, 1)
+theme_override_colors/font_selected_color = Color(0.133333, 0.137255, 0.137255, 1)
+theme_override_colors/font_disabled_color = Color(0.270588, 0.27451, 0.27451, 1)
+theme_override_colors/title_button_color = Color(0.133333, 0.137255, 0.137255, 1)
+theme_override_constants/draw_guides = 1
+theme_override_constants/h_separation = 2
+theme_override_fonts/font = ExtResource("5_3pa4v")
+theme_override_fonts/title_button_font = ExtResource("5_3pa4v")
+theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/title_button_font_size = 16
+theme_override_styles/panel = SubResource("StyleBoxFlat_ghgod")
+theme_override_styles/title_button_hover = ExtResource("5_8f3lf")
+theme_override_styles/title_button_pressed = ExtResource("5_8f3lf")
+theme_override_styles/title_button_normal = ExtResource("5_8f3lf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_elqfx")
+columns = 8
+column_titles_visible = true
+allow_search = false
+enable_recursive_folding = false
+hide_root = true
+scroll_horizontal_enabled = false
+scroll_vertical_enabled = false
+script = ExtResource("2_wkc0i")
+base_bg_color = Color(1, 0.690196, 0, 1)
+node_bg_color = Color(0.392157, 0.560784, 1, 1)
+ce_bg_color = Color(0.862745, 0.14902, 0.498039, 1)
+
+[node name="BackButton" type="Button" parent="ResultsContainer/ResultsPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Back"

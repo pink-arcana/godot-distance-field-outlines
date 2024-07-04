@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cp75cotwb1dkv"]
+
+[ext_resource type="Texture2D" uid="uid://v7sawujy2pcv" path="res://main/theme/styleboxes/palette_picker/palette_picker_button.png" id="1_npgxg"]
+
+[node name="ColorButton" type="Button"]
+custom_minimum_size = Vector2(34, 34)
+offset_right = 57.0
+offset_bottom = 41.0
+theme_type_variation = &"PalettePickerButton"
+toggle_mode = true
+icon = ExtResource("1_npgxg")
+icon_alignment = 1
