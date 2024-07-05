@@ -1,6 +1,28 @@
-### Distance Field Outlines
+# Distance Field Outlines
 
 [<img src="media/screenshots/platformer_demo_small.png">](media/screenshots/platformer_demo.png)
+
+
+- [Running the demo](#running-the-demo)
+- [How distance fields work](#how-distance-fields-work)
+- [Adding distance field outlines to your project](#adding-distance-field-outlines-to-your-project)
+    - [Selecting a version](#selecting-a-version)
+        - [DFOutlineNode](#dfoutlinenode)
+        - [DFOutlineCE](#dfoutlinece)
+- [Settings](#settings)
+    - [Depth Fade](#depth-fade)
+    - [Outline Effects](#outline-effects)
+    - [Animating outlines](#animating-outlines)
+- [Performance](#performance)
+    - [Testing performance](#testing-performance)
+
+------------------------------------------------
+
+- Discussions
+    - [Getting Started with CompositorEffects & Compute Shaders](https://github.com/pink-arcana/godot-distance-field-outlines/discussions/1)
+    - [Performance & Optimizations](https://github.com/pink-arcana/godot-distance-field-outlines/discussions/5)
+
+------------------------------------------------
 
 This Godot 4 demo project uses **distance fields** to create **wide and performant post-process outlines**. It contains two separate implementations of the same algorithm: **a Node for Compatibility mode**, and **a CompositorEffect for Godot 4.3/Forward+**. They are MIT-licensed and available for anyone to use in their own project.
 
@@ -14,14 +36,17 @@ For other things, like techniques for finding good screen-space outlines, or ant
 
 (License for this project, and its included assets, are in the [LICENSE](LICENSE) file.)
 
-#### Running the demo
+------------------------------------------------
+
+## Running the demo
 - Clone this repository to your computer, or click on `<Code>` and select `Download ZIP`.
 - Open the project in [Godot 4.3 beta](https://godotengine.org/download/preview/) or later.
     The first time you open the project, you may see multiple errors as the cache is created. Save the project, then open the `Project` menu and select `Reload Current Project`. This time, it should open without errors.
 - Click on the button to `Run Project`.
 
+------------------------------------------------
 
-### How it works
+## How distance fields work
 
 [<img src="media/diagrams/passes_small.png">](media/diagrams/passes.png)
 
@@ -40,8 +65,9 @@ This project uses **unsigned distance fields**[^1] to render post-process outlin
 
 [^1]: An SDF version is planned for the future. But it will have different use cases, so this implementation will still stand alone as its own effect.
 
+------------------------------------------------
 
-#### Adding Distance Field Outlines to your project
+## Adding Distance Field Outlines to your project
 - Choose a version to use (see below).
 - Follow the instructions in the [***DFOutlineCE*** README](project/df_outline_ce/README.md) or [***DFOutlineNode*** README](project/df_outline_node/README.md) to add it to your project.
 
@@ -53,7 +79,8 @@ Each version is made up of three shaders:
 - **Overlay shader**: Renders the distance field as an outline, with optional special effects. You can swap out this shader with your own rendering effects or anti-aliasing.
 
 
-##### Selecting a version
+### Selecting a version
+#### DFOutlineNode
 *****DFOutlineNode***** is a Node that you can add to any 3D scene. It uses the post-processing method described in Godot's [Multi-pass post-processing tutorial](https://docs.godotengine.org/en/latest/tutorials/shaders/custom_postprocessing.html#multi-pass-post-processing) to dynamically add a stack of CanvasLayer nodes to the scene at runtime. Each CanvasLayer contains a ColorRect with a CanvasItem shader. Together, they function as a shader pass.
 
 [<img src="media/diagrams/node_small.png">](media/diagrams/node.png)
@@ -65,6 +92,7 @@ Each version is made up of three shaders:
     - **Timing:** After the built-in rendering for the 3D scene is complete.
     - **Code:** GDScript and CanvasItem shaders. The GDScript is high level and focused on managing nodes in the SceneTree.
 
+#### DFOutlineCE
 *****DFOutlineCE***** is a [CompositorEffect](https://docs.godotengine.org/en/latest/classes/class_compositoreffect.html), a new Resource available in Godot 4.3 beta that you assign to a Camera3D or WorldEnvironment node. As described in [Compositor tutorial](https://docs.godotengine.org/en/latest/tutorials/rendering/compositor.html), it uses the low-level [RenderingDevice](https://docs.godotengine.org/en/latest/classes/class_renderingdevice.html) class to insert [Compute shader](https://docs.godotengine.org/en/latest/tutorials/shaders/compute_shaders.html) passes into the existing rendering pipeline.
 
 [<img src="media/diagrams/ce_small.png">](media/diagrams/ce.png)
@@ -87,13 +115,15 @@ However, ***DFOutlineCE*** has great potential for extension, and ***DFOutlineNo
 For these reasons, I would only recommend using ***DFOutlineNode*** if you need the Compatibility renderer. Otherwise, I think the CompositorEffect is worth the steeper learning curve (see [this discussion for learning resources](https://github.com/pink-arcana/godot-distance-field-outlines/discussions/1)).
 
 
-#### Settings
+------------------------------------------------
+
+## Settings
 ***DFOutlineNode*** and ***DFOutlineCE*** use the ***DFOutlineSettings*** resource. To change settings, open either object's inspector, then create or open the ***DFOutlineSettings***.
 
 - Choose an outline width and a viewport size. The width is normalized to the size of the viewport, so that outlines will look the same when the viewport size changes.
     - If you want an absolute width that will remain the same when the viewport resizes, use a script to change the viewport_size in the ***DFOutlineSettings*** resource when the game's viewport size changes. This will give you outlines that are the same pixel width, but look thinner when the viewport is larger, and thicker when the viewport is smaller.
 
-##### Depth fade
+### Depth fade
 This project includes options to vary outline width and transparency by depth. This can be important for scenes with wide outlines, as the outlines will obscure small objects in the distance. However, this implementation is imperfect!
 
 The outline's seed pixel determines the depth. This works well when the seed pixel is located over the object we're outlining. But our method of outline extraction finds two seed pixels, one on each side of the true edge. The other seed pixel may correspond to a far-away object, or even the sky. This means that each half of the outline has a different depth.
@@ -103,13 +133,13 @@ The limitation is obvious when you choose the `Alpha` depth fade mode. In the `W
 Because we are using unsigned distance fields, we don't have a concept of separate objects, or what inside or outside means. You can find ways around this, but I decided not to add more complexity to this project -- at least, not yet. So think of the depth feature as a starting point only.
 
 
-#### Outline Effects
+## Outline Effects
 This demo comes with multiple outline effects. They are basic effects meant to demonstrate different ways you can use distance values to create special effects, and even animations.
 
 It includes a couple basic anti-aliasing implementations. Distance fields can scale like vectors, but they don't anti-alias. And outlines, in particular, will highlight any existing aliasing in our scene. The smoothing effect included here is based on Valve's [recommendation to use smoothstep](https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf). There is another AA option using subpixel positions (https://github.com/pink-arcana/godot-distance-field-outlines/issues/3). See [Antialiasing for SDF Textures](https://drewcassidy.me/2020/06/26/sdf-antialiasing/) for more options and links.
 
 
-##### Changing settings at runtime
+### Changing settings at runtime
 You can change values in ***DFOutlineSettings*** via script at runtime. ***DFOutlineNode*** or ***DFOutlineCE*** will automatically update for the next frame. You do not need to manually call any additional update functions.
 
 For an example, see the Demo's UI.
@@ -117,7 +147,7 @@ For an example, see the Demo's UI.
 There is some overhead to changing settings, and that overhead is greater in ***DFOutlineNode***, especially if a width change leads to a change in the number of jump flooding passes. This requires updating the scene tree, so ***DFOutlineNode*** has a timer to prevent too-frequent updates.
 
 
-##### Animating outlines
+### Animating outlines
 
 [<img src="media/videos/pride_thumbnail.png">](media/videos/pride.mp4)
 
@@ -127,8 +157,9 @@ As of Godot 4.3 beta 2, it seems you cannot keyframe values in CompositorEffects
 
 Aside from this limitation, ***DFOutlineCE*** is a better choice for animations. It requires far less overhead to change settings than ***DFOutlineNode***, so it will be less likely to lag on slower hardware.
 
+------------------------------------------------
 
-#### Performance
+## Performance
 Distance fields in general tend to be performant, and the jump flooding algorithm we are using to create them is extremely efficient. (See [The Quest for Very Wide Outlines](https://bgolus.medium.com/the-quest-for-very-wide-outlines-ba82ed442cd9) by Ben Golus for detailed comparisons of different algorithms.)
 
 The things that make it slower are: larger screen size (more pixels to sample in each shader pass) and larger outline size (more JFA passes needed to create the distance field). The actual content on the screen, like how many objects or outlines there are, does not affect performance.
@@ -143,7 +174,7 @@ Here is a performance comparison between the two versions at different outline w
 On my Nvidia RTX 3080 GPU, both versions of this effect run fast enough to render 1024px outlines at 120 fps at 1080p, but only ***DFOutlineCE*** can maintain 120 fps in 4K. Gigantic outlines aren't super relevant to an actual game, though. As you can see in the graph above, both implementations are capable of good frame rates at smaller widths.
 
 
-##### Testing performance
+### Testing performance
 You can check performance by running the demo and opening the `Performance panel` (on the top-right), looking at Godot's built-in debugger, or by running the project in RenderDoc and clicking the clock icon to see frame times.
 
 In creating this project, I was also trying to learn best practices for optimizing compute shaders. So I added a couple custom tests based on functionality from the [Godot Debug Menu](https://github.com/godot-extended-libraries/godot-debug-menu) plugin.
@@ -158,8 +189,3 @@ To take a performance snapshot:
 - Press `F7`.
 - In the dialog box that opens, specify a custom subdirectory and name (or leave the defaults). Then press `Start`.
 - The plugin will record frame times over 1000 frames, and then display the results on-screen. It will also save screenshots of the scene with and without the results overlaid in the specified `user://` subdirectory.
-
-
-##### Optimization
-You can find optimization ideas in [this discussion thread](https://github.com/pink-arcana/godot-distance-field-outlines/discussions/5).
-
