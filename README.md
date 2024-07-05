@@ -174,7 +174,7 @@ Our unsigned distance field is more performant than a signed distance field beca
 Here is a performance comparison between the two versions at different outline widths:
 ![Performance Graph](media/screenshots/performance_graph_closeup.png)
 
-[Link to full graph with table and specs.](media/screenshots/performance_graph_closeup.png)
+[Link to full graph with table and specs.](media/screenshots/performance_graph.png)
 
 On my Nvidia RTX 3080 GPU, both versions of this effect run fast enough to render 1024px outlines at 120 fps at 1080p, but only ***DFOutlineCE*** can maintain 120 fps in 4K. Gigantic outlines aren't super relevant to an actual game, though. As you can see in the graph above, both implementations are capable of good frame rates at smaller widths.
 
