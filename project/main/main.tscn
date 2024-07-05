@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cb0tg1otysefb"]
+[gd_scene load_steps=3 format=3 uid="uid://cb0tg1otysefb"]
 
 [ext_resource type="Script" path="res://main/scene_container.gd" id="1_sl1lj"]
 [ext_resource type="Script" path="res://main/main.gd" id="1_vg80i"]
-[ext_resource type="Script" path="res://addons/pa_performance_monitor/performance_monitor.gd" id="2_4fl2c"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -12,9 +11,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vg80i")
-
-[node name="PerformanceMonitor" type="Node" parent="."]
-script = ExtResource("2_4fl2c")
 
 [node name="SceneContainer" type="Node" parent="."]
 script = ExtResource("1_sl1lj")

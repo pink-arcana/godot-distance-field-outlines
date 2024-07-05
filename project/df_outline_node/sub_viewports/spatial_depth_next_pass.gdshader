@@ -12,6 +12,6 @@ void vertex() {
 
 void fragment() {
 	bool render_depth = (CAMERA_VISIBLE_LAYERS & depth_layer) == depth_layer;
-	ALBEDO = vec3(camera_distance_n);
+	ALBEDO = vec3(camera_distance_n, 0.0, 0.0);
 	ALPHA = render_depth ? 1.0 : 0.0;
 }

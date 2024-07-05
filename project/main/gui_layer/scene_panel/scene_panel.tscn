@@ -264,6 +264,8 @@ exp_edit = true
 [node name="WidthLabel" type="Label" parent="PanelVBox/VBoxContainer/OutlineSettingsContainer/ScrollContainer/MarginContainer/VBoxContainer/OutlineSettings/GridContainer/WidthContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 24
 text = "0"
 vertical_alignment = 1
 

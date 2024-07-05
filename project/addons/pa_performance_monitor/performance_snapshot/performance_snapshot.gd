@@ -78,7 +78,7 @@ func _on_PerformanceMonitor_recording_completed(p_record : PerformanceRecord) ->
 
 	if not results_panel.visibility_changed.is_connected(_on_ResultsPanel_visibility_changed):
 		results_panel.visibility_changed.connect(_on_ResultsPanel_visibility_changed)
-	results_panel.popup_centered()
+	results_panel.popup()
 
 
 func _on_ResultsPanel_visibility_changed() -> void:

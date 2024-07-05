@@ -6,13 +6,13 @@
 
 [sub_resource type="Resource" id="Resource_im0pr"]
 script = ExtResource("3_iduxx")
-outline_width = 1024
+outline_width = 16
 viewport_size = Vector2i(1920, 1080)
 reset_viewport_size = false
 sobel_threshold = 0.05
 outline_effect = 0
 outline_color = Color(0, 0, 0, 1)
-background_color = Color(1, 1, 1, 1)
+background_color = Color(0, 0, 0, 1)
 use_background_color = false
 smoothing_distance = 1.5
 depth_fade_mode = 0
