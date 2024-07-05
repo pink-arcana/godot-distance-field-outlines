@@ -39,6 +39,11 @@ For other things, like techniques for finding good screen-space outlines, or ant
 ------------------------------------------------
 
 ## Running the demo
+
+Web: [Distance Field Outlines on Itch.io](https://pink-arcana.itch.io/distance-field-outlines)
+*Note that the web build has the CompositorEffect and performance features disabled.*
+
+Desktop:
 - Clone this repository to your computer, or click on `<Code>` and select `Download ZIP`.
 - Open the project in [Godot 4.3 beta](https://godotengine.org/download/preview/) or later.
     The first time you open the project, you may see multiple errors as the cache is created. Save the project, then open the `Project` menu and select `Reload Current Project`. This time, it should open without errors.
