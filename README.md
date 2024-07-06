@@ -39,6 +39,11 @@ For other things, like techniques for finding good screen-space outlines, or ant
 ------------------------------------------------
 
 ## Running the demo
+
+Web: [Distance Field Outlines on Itch.io](https://pink-arcana.itch.io/distance-field-outlines)
+*Note that the web build has the CompositorEffect and performance features disabled.*
+
+Desktop:
 - Clone this repository to your computer, or click on `<Code>` and select `Download ZIP`.
 - Open the project in [Godot 4.3 beta](https://godotengine.org/download/preview/) or later.
     The first time you open the project, you may see multiple errors as the cache is created. Save the project, then open the `Project` menu and select `Reload Current Project`. This time, it should open without errors.
@@ -169,7 +174,7 @@ Our unsigned distance field is more performant than a signed distance field beca
 Here is a performance comparison between the two versions at different outline widths:
 ![Performance Graph](media/screenshots/performance_graph_closeup.png)
 
-[Link to full graph with table and specs.](media/screenshots/performance_graph_closeup.png)
+[Link to full graph with table and specs.](media/screenshots/performance_graph.png)
 
 On my Nvidia RTX 3080 GPU, both versions of this effect run fast enough to render 1024px outlines at 120 fps at 1080p, but only ***DFOutlineCE*** can maintain 120 fps in 4K. Gigantic outlines aren't super relevant to an actual game, though. As you can see in the graph above, both implementations are capable of good frame rates at smaller widths.
 
