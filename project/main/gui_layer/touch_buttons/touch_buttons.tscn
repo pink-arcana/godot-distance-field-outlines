@@ -1,0 +1,117 @@
+[gd_scene load_steps=15 format=3 uid="uid://sjv6fcurdrgm"]
+
+[ext_resource type="Script" path="res://main/gui_layer/touch_buttons/touch_buttons.gd" id="1_oc76q"]
+[ext_resource type="Script" path="res://main/gui_layer/touch_button.gd" id="1_u5bov"]
+[ext_resource type="Texture2D" uid="uid://dhp5nfkocs5xg" path="res://main/gui_layer/touch_buttons/icons/up_button_normal.png" id="2_kxl2w"]
+[ext_resource type="Texture2D" uid="uid://cervgpmmln6oj" path="res://main/gui_layer/touch_buttons/icons/up_button_hover.png" id="4_4ane1"]
+[ext_resource type="Texture2D" uid="uid://cbuqb7ln6ob3r" path="res://main/gui_layer/touch_buttons/icons/up_button_pressed.png" id="5_riccr"]
+[ext_resource type="Texture2D" uid="uid://gx56u4jxtj2t" path="res://main/gui_layer/touch_buttons/icons/down_button_normal.png" id="6_4fenx"]
+[ext_resource type="Texture2D" uid="uid://dw44yxjhfv1py" path="res://main/gui_layer/touch_buttons/icons/right_button_normal.png" id="6_ctkjv"]
+[ext_resource type="Texture2D" uid="uid://dud3c2g72yc7i" path="res://main/gui_layer/touch_buttons/icons/left_button_normal.png" id="6_gqhln"]
+[ext_resource type="Texture2D" uid="uid://dd0y1yiexus31" path="res://main/gui_layer/touch_buttons/icons/left_button_hover.png" id="7_blown"]
+[ext_resource type="Texture2D" uid="uid://bji846bpg2ut7" path="res://main/gui_layer/touch_buttons/icons/down_button_hover.png" id="7_jn8bp"]
+[ext_resource type="Texture2D" uid="uid://b70gkluum5ra5" path="res://main/gui_layer/touch_buttons/icons/right_button_hover.png" id="7_xq8os"]
+[ext_resource type="Texture2D" uid="uid://bukr7ss8bh0sw" path="res://main/gui_layer/touch_buttons/icons/left_button_pressed.png" id="8_6hs5l"]
+[ext_resource type="Texture2D" uid="uid://qychr8j8uebw" path="res://main/gui_layer/touch_buttons/icons/down_button_pressed.png" id="8_f637n"]
+[ext_resource type="Texture2D" uid="uid://d1g30vkp32umx" path="res://main/gui_layer/touch_buttons/icons/right_button_pressed.png" id="8_letrp"]
+
+[node name="TouchButtons" type="MarginContainer"]
+modulate = Color(1, 1, 1, 0.772549)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -23.0
+offset_top = -113.0
+offset_right = 23.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 32
+script = ExtResource("1_oc76q")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 3
+
+[node name="Control2" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="RotateUpButton" type="Button" parent="GridContainer"]
+layout_mode = 2
+theme_type_variation = &"TouchButton"
+icon = ExtResource("2_kxl2w")
+flat = true
+script = ExtResource("1_u5bov")
+action_name = &"camera_rotate_up"
+icon_normal = ExtResource("2_kxl2w")
+icon_hover = ExtResource("4_4ane1")
+icon_pressed = ExtResource("5_riccr")
+
+[node name="Control3" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="RotateLeftButton" type="Button" parent="GridContainer"]
+layout_mode = 2
+theme_type_variation = &"TouchButton"
+icon = ExtResource("6_gqhln")
+flat = true
+script = ExtResource("1_u5bov")
+action_name = &"camera_rotate_left"
+icon_normal = ExtResource("6_gqhln")
+icon_hover = ExtResource("7_blown")
+icon_pressed = ExtResource("8_6hs5l")
+
+[node name="Control" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="RotateRightButton" type="Button" parent="GridContainer"]
+layout_mode = 2
+theme_type_variation = &"TouchButton"
+icon = ExtResource("6_ctkjv")
+flat = true
+script = ExtResource("1_u5bov")
+action_name = &"camera_rotate_right"
+icon_normal = ExtResource("6_ctkjv")
+icon_hover = ExtResource("7_xq8os")
+icon_pressed = ExtResource("8_letrp")
+
+[node name="Control4" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="RotateDownButton" type="Button" parent="GridContainer"]
+layout_mode = 2
+theme_type_variation = &"TouchButton"
+icon = ExtResource("6_4fenx")
+flat = true
+script = ExtResource("1_u5bov")
+action_name = &"camera_rotate_down"
+icon_normal = ExtResource("6_4fenx")
+icon_hover = ExtResource("7_jn8bp")
+icon_pressed = ExtResource("8_f637n")
+
+[node name="Control5" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="ZoomOutButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"TouchButton"
+text = "-"
+script = ExtResource("1_u5bov")
+action_name = &"camera_zoom_out"
+
+[node name="Control6" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="ZoomInButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_type_variation = &"TouchButton"
+text = "+"
+script = ExtResource("1_u5bov")
+action_name = &"camera_zoom_in"

@@ -2,6 +2,7 @@ extends Node
 
 const DEBUG_ENABLED := false
 
+signal touch_buttons_requested(value : bool)
 
 signal gimbal_input_capture_changed(value : bool)
 

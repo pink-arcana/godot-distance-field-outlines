@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bfn08yty6e2yu"]
+[gd_scene load_steps=10 format=3 uid="uid://bfn08yty6e2yu"]
 
 [ext_resource type="Script" path="res://main/gui_layer/gui_layer.gd" id="1_ootin"]
 [ext_resource type="PackedScene" uid="uid://c2ifhahk66bwe" path="res://main/gui_layer/fps_panel/fps_panel.tscn" id="2_1vkrt"]
+[ext_resource type="PackedScene" uid="uid://sjv6fcurdrgm" path="res://main/gui_layer/touch_buttons/touch_buttons.tscn" id="2_u50pr"]
 [ext_resource type="PackedScene" uid="uid://nfsnvlt86qnl" path="res://main/gui_layer/scene_panel/scene_panel.tscn" id="5_4wxqt"]
 [ext_resource type="Theme" uid="uid://txqpy04th48y" path="res://main/theme/menu_theme.tres" id="6_q7kgy"]
 [ext_resource type="PackedScene" uid="uid://nopqqak6pxr2" path="res://main/gui_layer/input_panel/input_panel.tscn" id="7_gfhmq"]
@@ -13,12 +14,22 @@
 layer = 128
 script = ExtResource("1_ootin")
 
+[node name="TouchButtons" parent="." instance=ExtResource("2_u50pr")]
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -412.0
+offset_top = -500.0
+offset_right = -150.0
+grow_horizontal = 0
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
@@ -44,6 +55,7 @@ layout_mode = 2
 [node name="RightVBox" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
+mouse_filter = 2
 
 [node name="MenuPanel" parent="MarginContainer/RightVBox" instance=ExtResource("10_18248")]
 layout_mode = 2
@@ -63,13 +75,15 @@ layout_mode = 2
 [node name="Control" type="Control" parent="MarginContainer/RightVBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
 
-[node name="ExitPanel" type="PanelContainer" parent="MarginContainer"]
+[node name="ExitPanel" type="PanelContainer" parent="MarginContainer/RightVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 theme = ExtResource("6_q7kgy")
 
-[node name="ExitButton" parent="MarginContainer/ExitPanel" instance=ExtResource("7_y1vsh")]
+[node name="ExitButton" parent="MarginContainer/RightVBox/ExitPanel" instance=ExtResource("7_y1vsh")]
 layout_mode = 2

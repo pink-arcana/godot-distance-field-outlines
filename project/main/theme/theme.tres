@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=72 format=3 uid="uid://dmbykrvhlytsq"]
+[gd_resource type="Theme" load_steps=76 format=3 uid="uid://dmbykrvhlytsq"]
 
 [ext_resource type="FontFile" uid="uid://rl84423btu8g" path="res://main/theme/fonts/roboto/roboto-bold.ttf" id="1_3hfbc"]
 [ext_resource type="FontFile" uid="uid://dj7toqnvorx6d" path="res://main/theme/fonts/roboto/roboto-medium.ttf" id="1_eu0gv"]
@@ -42,6 +42,7 @@
 [ext_resource type="StyleBox" uid="uid://tvynxdumbvck" path="res://main/theme/styleboxes/scroll/scroll_grabber.tres" id="38_ftj4h"]
 [ext_resource type="StyleBox" uid="uid://nij7tgfk5spt" path="res://main/theme/styleboxes/scroll/scroll.tres" id="39_ckfc4"]
 [ext_resource type="FontFile" uid="uid://ctb8trolgfamu" path="res://main/theme/fonts/roboto/roboto-bolditalic.ttf" id="39_u3ais"]
+[ext_resource type="StyleBox" uid="uid://djrnw30y0o2px" path="res://main/theme/styleboxes/touch_button/touch_button_normal.tres" id="41_kf4bi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ayb3k"]
 content_margin_left = 16.0
@@ -170,6 +171,32 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mfasr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jf1gk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ptiu0"]
+bg_color = Color(0.133333, 0.137255, 0.137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.980392, 0.87451, 0.0470588, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ji2ag"]
+bg_color = Color(0.980392, 0.87451, 0.0470588, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.133333, 0.137255, 0.137255, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywdwi"]
 bg_color = Color(0.980392, 0.87451, 0.0470588, 1)
@@ -373,6 +400,21 @@ TooltipLabel/font_sizes/font_size = 20
 TooltipLabel/fonts/font = ExtResource("1_eu0gv")
 TooltipLabel/styles/normal = ExtResource("38_6af41")
 TooltipPanel/styles/panel = SubResource("StyleBoxEmpty_mfasr")
+TouchButton/base_type = &"Button"
+TouchButton/colors/font_color = Color(1, 1, 1, 1)
+TouchButton/colors/font_hover_color = Color(1, 1, 1, 1)
+TouchButton/colors/font_pressed_color = Color(0.133333, 0.137255, 0.137255, 1)
+TouchButton/colors/icon_focus_color = Color(1, 1, 1, 1)
+TouchButton/colors/icon_hover_color = Color(1, 1, 1, 1)
+TouchButton/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+TouchButton/colors/icon_normal_color = Color(1, 1, 1, 1)
+TouchButton/colors/icon_pressed_color = Color(1, 1, 1, 1)
+TouchButton/font_sizes/font_size = 64
+TouchButton/fonts/font = ExtResource("10_6xmcq")
+TouchButton/styles/focus = SubResource("StyleBoxEmpty_jf1gk")
+TouchButton/styles/hover = SubResource("StyleBoxFlat_ptiu0")
+TouchButton/styles/normal = ExtResource("41_kf4bi")
+TouchButton/styles/pressed = SubResource("StyleBoxFlat_ji2ag")
 VScrollBar/styles/grabber = ExtResource("38_ftj4h")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_ywdwi")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_xfaky")
