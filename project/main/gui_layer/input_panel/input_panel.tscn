@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://nopqqak6pxr2"]
+[gd_scene load_steps=16 format=3 uid="uid://nopqqak6pxr2"]
 
 [ext_resource type="PackedScene" uid="uid://b38of36pw26wi" path="res://main/theme/styleboxes/header_button/header_button.tscn" id="1_o8qbt"]
 [ext_resource type="Texture2D" uid="uid://bkn58f178d62v" path="res://main/gui_layer/input_panel/input_icons/mouse_move.png" id="2_7kati"]
@@ -15,7 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://cct8tsl8wak5d" path="res://main/gui_layer/input_panel/input_icons/key_e.png" id="13_27yw7"]
 [ext_resource type="Texture2D" uid="uid://xf3y8hjjn8q8" path="res://main/gui_layer/input_panel/input_icons/key_minus.png" id="14_niu7t"]
 [ext_resource type="Texture2D" uid="uid://75q361hqfq6l" path="res://main/gui_layer/input_panel/input_icons/key_plus.png" id="15_oi0bp"]
-[ext_resource type="Script" path="res://main/gui_layer/input_panel/touchscreen_buttons_toggle.gd" id="16_uim8l"]
 
 [node name="InputPanel" type="MarginContainer"]
 offset_right = 723.0
@@ -453,8 +452,3 @@ layout_mode = 2
 texture = ExtResource("11_7mkdd")
 expand_mode = 3
 stretch_mode = 5
-
-[node name="TouchscreenButtonsToggle" type="CheckBox" parent="PanelVBox/PanelContainer/VBoxContainer"]
-layout_mode = 2
-text = "Show on-screen buttons"
-script = ExtResource("16_uim8l")

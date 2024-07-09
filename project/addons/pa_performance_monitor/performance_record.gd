@@ -61,16 +61,19 @@ func get_max(p_type : Type) -> float:
 
 func get_average_string(p_type : Type) -> String:
 	var f := get_average(p_type)
+	f = snappedf(f, 0.01)
 	return str(f).pad_decimals(pad_decimal_count)
 
 
 func get_min_string(p_type : Type) -> String:
 	var f := get_min(p_type)
+	f = snappedf(f, 0.01)
 	return str(f).pad_decimals(pad_decimal_count)
 
 
 func get_max_string(p_type : Type) -> String:
 	var f := get_max(p_type)
+	f = snappedf(f, 0.01)
 	return str(f).pad_decimals(pad_decimal_count)
 
 

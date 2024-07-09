@@ -15,13 +15,17 @@ layer = 128
 script = ExtResource("1_ootin")
 
 [node name="TouchButtons" parent="." instance=ExtResource("2_u50pr")]
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -412.0
-offset_top = -500.0
-offset_right = -150.0
-grow_horizontal = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 412.0
+offset_bottom = 500.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15
@@ -62,28 +66,38 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 
+[node name="InputPanel" parent="MarginContainer/RightVBox" instance=ExtResource("7_gfhmq")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="FPSPanel" parent="MarginContainer/RightVBox" instance=ExtResource("2_1vkrt")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 
-[node name="InputPanel" parent="MarginContainer/RightVBox" instance=ExtResource("7_gfhmq")]
-unique_name_in_owner = true
-layout_mode = 2
-
 [node name="Control" type="Control" parent="MarginContainer/RightVBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
-size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="ExitPanel" type="PanelContainer" parent="MarginContainer/RightVBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+mouse_filter = 2
+
+[node name="TouchButtonPlaceholder" type="Control" parent="MarginContainer/HBoxContainer" groups=["TouchButtonPlaceholder"]]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="ExitPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 theme = ExtResource("6_q7kgy")
 
-[node name="ExitButton" parent="MarginContainer/RightVBox/ExitPanel" instance=ExtResource("7_y1vsh")]
+[node name="ExitButton" parent="MarginContainer/HBoxContainer/ExitPanel" instance=ExtResource("7_y1vsh")]
 layout_mode = 2

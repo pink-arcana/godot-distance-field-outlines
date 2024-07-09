@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://elv7i1a3al8k"]
+[gd_scene load_steps=7 format=3 uid="uid://elv7i1a3al8k"]
 
 [ext_resource type="Theme" uid="uid://txqpy04th48y" path="res://main/theme/menu_theme.tres" id="1_2vauf"]
 [ext_resource type="Script" path="res://main/gui_layer/menu_panel/menu_panel.gd" id="1_kwjbu"]
 [ext_resource type="PackedScene" uid="uid://nrfug53aanpb" path="res://main/gui_layer/reset_camera_button.tscn" id="2_0thwf"]
+[ext_resource type="Script" path="res://main/gui_layer/input_panel/touchscreen_buttons_toggle.gd" id="3_7c22t"]
+[ext_resource type="StyleBox" uid="uid://bixioov10g3x3" path="res://main/theme/styleboxes/button/button.tres" id="3_inimd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iybqi"]
 
 [node name="MenuPanel" type="PanelContainer"]
 custom_minimum_size = Vector2(300, 0)
@@ -12,6 +16,17 @@ script = ExtResource("1_kwjbu")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 0
+
+[node name="TouchscreenButtonsToggle" type="CheckBox" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iybqi")
+theme_override_styles/hover_pressed_mirrored = ExtResource("3_inimd")
+theme_override_styles/hover_pressed = ExtResource("3_inimd")
+theme_override_styles/hover = ExtResource("3_inimd")
+theme_override_styles/pressed = ExtResource("3_inimd")
+theme_override_styles/normal = ExtResource("3_inimd")
+text = "Camera buttons"
+script = ExtResource("3_7c22t")
 
 [node name="ResetCameraButton" parent="HBoxContainer" instance=ExtResource("2_0thwf")]
 layout_mode = 2

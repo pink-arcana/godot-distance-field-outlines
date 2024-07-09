@@ -1,3 +1,4 @@
+class_name IconCheckBox
 extends CheckBox
 
 var unchecked : Texture2D = preload("res://main/theme/icons/toggle_off.png")

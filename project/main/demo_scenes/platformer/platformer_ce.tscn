@@ -57,10 +57,5 @@ transform = Transform3D(1, 0, 0, 0, 0.980615, 0.195946, 0, -0.195946, 0.980615, 
 [node name="Camera3D" parent="Platformer/CameraGimbal/GimbalY/GimbalX" index="0" groups=["DFCamera"]]
 compositor = SubResource("Compositor_1xa5a")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_x6rlq")
-}
-
 [editable path="Platformer"]
 [editable path="Platformer/CameraGimbal"]

@@ -24,8 +24,8 @@ var column_display_names := {
 	Column.CE_FRAME_TIME : "CompositorEffect\nTime",
 	Column.NODE_FRAME_TIME_DIFF : "Increase over base\n(Node - Base)",
 	Column.CE_FRAME_TIME_DIFF : "Increase over base\n(CE - Base)",
-	Column.NODE_PASS_TIME : "Time per pass\n(Node - Base) / Passes",
-	Column.CE_PASS_TIME : "Time per pass\n(CE - Base) / Passes",
+	Column.NODE_PASS_TIME : "Change\n(Time - Previous)",
+	Column.CE_PASS_TIME : "Change\n(Time - Previous)",
 }
 
 const TOTAL_FRAME_TIME := PerformanceRecord.Type.TOTAL
@@ -40,8 +40,13 @@ const WIDTHS : PackedInt32Array = [0,2,4,8,16,32,64,128,256,512,1024]
 var _base_frame_time : float
 var _width_items := {} # {width : TreeItem}
 
+var node_times : PackedFloat32Array = []
+var ce_times : PackedFloat32Array = []
+
 func _ready() -> void:
 	clear()
+	ce_times.clear()
+	node_times.clear()
 	root = create_item()
 	hide_root = true
 
@@ -100,11 +105,13 @@ func add_record(p_record : PerformanceRecord) -> void:
 	var pass_count : int = 2 + jf_calc.get_step_offsets().size()
 	var frame_time : float = record.get_average(TOTAL_FRAME_TIME)
 	var frame_time_diff : float = frame_time - _base_frame_time
-	var pass_time : float = frame_time_diff / pass_count
+	#var pass_time : float = frame_time_diff / float(pass_count)
 
-	var frame_time_str := str(frame_time).pad_decimals(2)
-	var frame_time_diff_str := str(frame_time_diff).pad_decimals(2)
-	var pass_time_str := str(pass_time).pad_decimals(2)
+	var frame_time_str := str(snappedf(frame_time, 0.01))
+	var frame_time_diff_str := str(snappedf(frame_time_diff, 0.01))
+	#var pass_time_str := str(snappedf(pass_time, 0.01))
+
+	#print("width", width)
 
 	var item : TreeItem = _width_items[width]
 	item.set_text(Column.PASS_COUNT, str(pass_count))
@@ -116,19 +123,27 @@ func add_record(p_record : PerformanceRecord) -> void:
 			"width": str(width),
 			"frame_time": frame_time_str,
 			"diff_time": frame_time_diff_str,
-			"pass_time": pass_time_str,
+			#"pass_time": pass_time_str,
 	}
 
-	var frame_time_template := "{type}\nWidth: {width}\nFrame time: {frame_time}"
-	var diff_template := "{type}\nWidth: {width}\nFrame time over base: {diff_time}"
-	var pass_template := "{type}\nWidth: {width}\nTime per pass: {pass_time}"
+	var frame_time_template := "Frame time: {frame_time}"
+	var diff_template := "Increase over base: {diff_time}"
+	var pass_template := "Change: {pass_time}"
 
 	if scene_type == DemoScene.SceneType.NODE:
 		dict["type"] = "Node"
+		var ft_increase_string : String
+		if node_times.is_empty():
+			ft_increase_string = "---"
+		else:
+			var ft_increase : float = frame_time - node_times[node_times.size() - 1]
+			ft_increase_string = str(snappedf(ft_increase, 0.01))
+		node_times.append(frame_time)
+		dict["pass_time"] = ft_increase_string
 
 		item.set_text(Column.NODE_FRAME_TIME, frame_time_str)
 		item.set_text(Column.NODE_FRAME_TIME_DIFF, frame_time_diff_str)
-		item.set_text(Column.NODE_PASS_TIME, pass_time_str)
+		item.set_text(Column.NODE_PASS_TIME, ft_increase_string)
 
 		item.set_tooltip_text(Column.NODE_FRAME_TIME, frame_time_template.format(dict))
 		item.set_tooltip_text(Column.NODE_FRAME_TIME_DIFF, diff_template.format(dict))
@@ -141,10 +156,20 @@ func add_record(p_record : PerformanceRecord) -> void:
 
 	elif scene_type == DemoScene.SceneType.COMPOSITOR_EFFECT:
 		dict["type"] = "CompositorEffect"
+		var ft_increase_string : String
+		if ce_times.is_empty():
+			#print("empty ce_times", ce_times)
+			ft_increase_string = "---"
+		else:
+			#print("ce_times", ce_times)
+			var ft_increase : float = frame_time - ce_times[ce_times.size() - 1]
+			ft_increase_string = str(snappedf(ft_increase, 0.01))
+		ce_times.append(frame_time)
+		dict["pass_time"] = ft_increase_string
 
 		item.set_text(Column.CE_FRAME_TIME, frame_time_str)
 		item.set_text(Column.CE_FRAME_TIME_DIFF, frame_time_diff_str)
-		item.set_text(Column.CE_PASS_TIME, pass_time_str)
+		item.set_text(Column.CE_PASS_TIME, ft_increase_string)
 
 		item.set_tooltip_text(Column.CE_FRAME_TIME, frame_time_template.format(dict))
 		item.set_tooltip_text(Column.CE_FRAME_TIME_DIFF, diff_template.format(dict))

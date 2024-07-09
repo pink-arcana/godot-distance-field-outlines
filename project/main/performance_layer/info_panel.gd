@@ -20,11 +20,11 @@ func update_from_context(p_context : Dictionary) -> void:
 
 	var context := p_context
 
-	var total_passes : int = 0
-	if Demo.jf_calc:
-		total_passes = 2 + context.jf_calc.get_step_offsets().size()
+	#var total_passes : int = 0
+	#if Demo.jf_calc:
+		#total_passes = 2 + context.jf_calc.get_step_offsets().size()
 
-	context["max_passes"] = total_passes
+	#context["max_passes"] = total_passes
 	context["demo"] = Demo.demo_scene.display_name
 
 	var effect_id := Demo.settings.outline_effect
@@ -33,19 +33,25 @@ func update_from_context(p_context : Dictionary) -> void:
 			str(effect_id),
 	)
 
+	context["frames_per_test"] = context["total_frames"]
+
 	var hidden_keys : PackedStringArray = [
 			"jf_calc",
 			"demo_scene",
 			"scene_type",
+			"total_frames",
 	]
 
 	for key in context:
 		if key in hidden_keys:
 			continue
 
+		const FONT_SIZE : int = 20
+
 		var display_label := Label.new()
 		display_label.text = str(key).replace("_", " ").capitalize()
 		display_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+		display_label.set("theme_override_font_sizes/font_size", FONT_SIZE)
 		context_container.add_child(display_label)
 
 		var value_label := Label.new()
@@ -54,4 +60,5 @@ func update_from_context(p_context : Dictionary) -> void:
 		value_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		value_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 		value_label.theme_type_variation = "BoldLabel"
+		value_label.set("theme_override_font_sizes/font_size", FONT_SIZE)
 		context_container.add_child(value_label)

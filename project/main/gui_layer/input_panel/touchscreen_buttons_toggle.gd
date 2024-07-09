@@ -1,7 +1,8 @@
-extends CheckBox
+extends IconCheckBox
 
 
 func _ready() -> void:
+	super._ready()
 	Events.touch_buttons_requested.connect(_on_Events_touch_buttons_requested)
 	var toggled_on := DisplayServer.is_touchscreen_available()
 	Events.touch_buttons_requested.emit.call_deferred(toggled_on)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://sjv6fcurdrgm"]
+[gd_scene load_steps=16 format=3 uid="uid://sjv6fcurdrgm"]
 
 [ext_resource type="Script" path="res://main/gui_layer/touch_buttons/touch_buttons.gd" id="1_oc76q"]
 [ext_resource type="Script" path="res://main/gui_layer/touch_button.gd" id="1_u5bov"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bukr7ss8bh0sw" path="res://main/gui_layer/touch_buttons/icons/left_button_pressed.png" id="8_6hs5l"]
 [ext_resource type="Texture2D" uid="uid://qychr8j8uebw" path="res://main/gui_layer/touch_buttons/icons/down_button_pressed.png" id="8_f637n"]
 [ext_resource type="Texture2D" uid="uid://d1g30vkp32umx" path="res://main/gui_layer/touch_buttons/icons/right_button_pressed.png" id="8_letrp"]
+[ext_resource type="StyleBox" uid="uid://c54cd3gfcm47v" path="res://main/theme/styleboxes/touch_button/touch_button_arrow_normal.tres" id="15_tu68c"]
 
 [node name="TouchButtons" type="MarginContainer"]
 modulate = Color(1, 1, 1, 0.772549)
@@ -27,21 +28,25 @@ offset_top = -113.0
 offset_right = 23.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
 script = ExtResource("1_oc76q")
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2
+theme_override_constants/h_separation = -32
+theme_override_constants/v_separation = -32
 columns = 3
 
 [node name="Control2" type="Control" parent="GridContainer"]
 layout_mode = 2
 
 [node name="RotateUpButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
-theme_type_variation = &"TouchButton"
+theme_type_variation = &"TouchButtonArrow"
 icon = ExtResource("2_kxl2w")
-flat = true
+icon_alignment = 1
 script = ExtResource("1_u5bov")
 action_name = &"camera_rotate_up"
 icon_normal = ExtResource("2_kxl2w")
@@ -52,10 +57,11 @@ icon_pressed = ExtResource("5_riccr")
 layout_mode = 2
 
 [node name="RotateLeftButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
-theme_type_variation = &"TouchButton"
+theme_type_variation = &"TouchButtonArrow"
 icon = ExtResource("6_gqhln")
-flat = true
+icon_alignment = 1
 script = ExtResource("1_u5bov")
 action_name = &"camera_rotate_left"
 icon_normal = ExtResource("6_gqhln")
@@ -66,10 +72,11 @@ icon_pressed = ExtResource("8_6hs5l")
 layout_mode = 2
 
 [node name="RotateRightButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
-theme_type_variation = &"TouchButton"
+theme_type_variation = &"TouchButtonArrow"
 icon = ExtResource("6_ctkjv")
-flat = true
+icon_alignment = 1
 script = ExtResource("1_u5bov")
 action_name = &"camera_rotate_right"
 icon_normal = ExtResource("6_ctkjv")
@@ -80,10 +87,11 @@ icon_pressed = ExtResource("8_letrp")
 layout_mode = 2
 
 [node name="RotateDownButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
-theme_type_variation = &"TouchButton"
+theme_type_variation = &"TouchButtonArrow"
 icon = ExtResource("6_4fenx")
-flat = true
+icon_alignment = 1
 script = ExtResource("1_u5bov")
 action_name = &"camera_rotate_down"
 icon_normal = ExtResource("6_4fenx")
@@ -93,7 +101,12 @@ icon_pressed = ExtResource("8_f637n")
 [node name="Control5" type="Control" parent="GridContainer"]
 layout_mode = 2
 
-[node name="ZoomOutButton" type="Button" parent="GridContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="GridContainer"]
+custom_minimum_size = Vector2(175, 175)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("15_tu68c")
+
+[node name="ZoomOutButton" type="Button" parent="GridContainer/PanelContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -106,10 +119,15 @@ action_name = &"camera_zoom_out"
 [node name="Control6" type="Control" parent="GridContainer"]
 layout_mode = 2
 
-[node name="ZoomInButton" type="Button" parent="GridContainer"]
+[node name="PanelContainer2" type="PanelContainer" parent="GridContainer"]
+custom_minimum_size = Vector2(175, 175)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("15_tu68c")
+
+[node name="ZoomInButton" type="Button" parent="GridContainer/PanelContainer2"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"TouchButton"
 text = "+"

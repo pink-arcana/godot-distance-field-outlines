@@ -176,8 +176,7 @@ func _setup_viewports() -> void:
 
 	color_sub_viewport.setup(scene_camera, color_render_layers)
 
-	# The depth viewport's camera must see both the color objects
-	# and the depth quadmesh.
+	# The depth viewport's camera must see both color and depth.
 	var depth_camera_layers := depth_render_layer + color_render_layers
 	depth_sub_viewport.setup(scene_camera, depth_camera_layers)
 

@@ -58,9 +58,7 @@ void fragment() {
 		float min_dist_n = valid_seed ? sqrt(min_dist_sq) / distance_denominator : 1.0;
 
 		// In the green channel, we will store the depth of the seed position.
-		// depth_texture contains the normalized *linear depth*, as
-		// rendered by our Quadmesh, but has been converted to *srgb colorspace*
-		// by its viewport.
+		// Our custom depth_texture contains the normalized *linear depth*.
 		vec2 seed_uv = seed_coord * pixel_size;
 		float linear_depth_n = valid_seed ? srgb_to_linear(textureLod(depth_texture, seed_uv, 0.0)).r : 1.0;
 		COLOR.rg = vec2(min_dist_n, linear_depth_n);

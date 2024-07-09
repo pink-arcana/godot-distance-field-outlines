@@ -170,4 +170,5 @@ func update_graph(p_record : PerformanceRecord) -> void:
 	var width : float = jf_calc.get_debug_dict().get("_render_outline_width", 0.0)
 	var width_i := roundi(width)
 	assert(_WIDTHS.has(width_i), "render width=%s not found in _WIDTHS" % width_i)
+	await get_tree().process_frame
 	graph_rect.add_values(series_id, {width_i : frame_time})

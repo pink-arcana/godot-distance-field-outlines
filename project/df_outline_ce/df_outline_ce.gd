@@ -224,26 +224,15 @@ func _render_callback(
 	# 16-bit SFLOAT is not precise enough to store screen coords.
 	# 32-bit SFLOAT is, but is slower.
 	# 16-bit UNORM is, and is faster than 32-bit SFLOAT.
-	# From DFOutlineNode, we know that, if the coords are integers,
-	# a 3-channel 8-bit UNORM is also sufficient up to certain screen sizes.
+	# An RG16 UINT was faster than RG16 UNORM (likely due to no conversions required),
+	# but prevented sub-pixel coords and couldn't be reused for the distance field/depth texture.
+	# From DFOutlineNode, we also know that, if the coords are integers,
+	# a 3-channel 8-bit UNORM is sufficient up to certain screen sizes.
 	#
 	# A 16-bit SNORM would allow us to store invalid UVs as negative numbers.
 	# However, mapping UVs to [0,1.0] in SNORM decreased precision.
 	# UNORM with UVs mapped to [0,0.99] (with 1.0 to indicate invalid)
 	# seems to preserve adequate precision at 1920 x 1080.
-	#
-	# We are re-using one of the ping-pong 2-channel JFA pass textures
-	# for the distance field.
-	# In brief testing, creating a new R16_UNORM texture was ~0.1ms faster,
-	# and going further to an R8_UNORM should be sufficient for the distance field.
-	# However, using a different texture format would require maintaining
-	# a separate compute shader for the last JFA pass.
-	#
-	# If neighbor sampling is not required in the overlay shader,
-	# the last JFA pass can be combined with the overlay shader, and the additional
-	# texture would not be needed. This would mean losing the distance field
-	# in RenderDoc for debugging. But it can be rendered to the screen using the
-	# OutlineEffect.
 	const JF_TEXTURE_FORMAT := RenderingDevice.DATA_FORMAT_R16G16_UNORM
 	const TEXTURE_SAMPLES := RenderingDevice.TextureSamples.TEXTURE_SAMPLES_1
 	const TEXTURE_LAYER_COUNT : int = 1
