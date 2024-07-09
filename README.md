@@ -103,7 +103,7 @@ Both versions are made up of three shaders:
 
 - Requirements
     - **Renderer:** Any, but optimized for Compatibility. Works in single- and multi-threaded web exports.
-    - **Engine version:** Godot 4.3 beta or later due to minor GDScript changes. However, can be adapted for earlier versions of Godot 4, or even Godot 3.
+    - **Engine version:** Godot 4.3 beta or later (due to minor Godot 4.3 changes). However, can be adapted for earlier versions of Godot 4, or even Godot 3.
     - **Source:** Works out of the box with a 3D scene. Could work with a 2D scene with minor changes.
     - **Timing:** After the built-in rendering for the 3D scene is complete.
     - **Code:** GDScript and CanvasItem shaders. The GDScript is high level and focused on managing nodes in the SceneTree.
