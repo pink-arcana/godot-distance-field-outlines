@@ -32,7 +32,7 @@ const SHADER_MATERIAL : String = "SHADER_MATERIAL"
 @export var scene_camera : Camera3D :
 	set(value):
 		scene_camera = value
-		_get_configuration_warnings()
+		update_configuration_warnings()
 		if scene_camera:
 			_setup_viewports()
 
@@ -293,12 +293,8 @@ func _update_layers() -> void:
 	# and remain unchanged. So we need to adjust the _control_size
 	# for the content_scale_factor.
 	#
-	# We also need to set the color rects layouts to full rect
-	# when we instantiate them.
-	#
-	# NOTE: There is a bug here. When the window is resized, there are
-	# sometimes gaps at the edge without outlines.
-	# It is not clear to me how to fix that.
+	# (We will also set the color rects layouts to full rect
+	# when we instantiate them.)
 	var content_scale_factor := get_tree().root.content_scale_factor
 	_control_size = _control_size/content_scale_factor
 
@@ -453,10 +449,10 @@ func _update_shader_params() -> void:
 	if depth_sub_viewport:
 		if outline_settings.depth_fade_mode == DFOutlineSettings.DepthFadeMode.NONE:
 			depth_sub_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
-			if _depth_material:
-				_depth_material.set_shader_parameter("depth_max", outline_settings.depth_fade_end)
 		else:
 			depth_sub_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		if _depth_material:
+			_depth_material.set_shader_parameter("depth_max", outline_settings.depth_fade_end)
 
 	if _extraction_material:
 		_set_shader_params(

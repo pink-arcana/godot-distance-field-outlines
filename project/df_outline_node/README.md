@@ -22,9 +22,7 @@ However, when you run your project, you can view the layers in the Remote scene 
 
 
 ### Viewport troubleshooting
-DFOutlineNode uses CanvasItem nodes to create its shader passes. This means that, unlike the 3D scene, any changes to viewport scaling in ProjectSettings can affect them. `_update_layers()` in DFOutlineNode attempts to compensate for changes in viewport size and content scale, but it is not perfect. (See https://github.com/pink-arcana/godot-distance-field-outlines/issues/2.)
-
-If you run into problems in your project, this is the function you want to look at first.
+DFOutlineNode uses CanvasItem nodes to create its shader passes. This means that, unlike the 3D scene, any changes to viewport scaling in ProjectSettings can affect them. DFOutlineNode's [`_update_layers()` function](https://github.com/pink-arcana/godot-distance-field-outlines/blob/main/project/df_outline_node/df_outline_node.gd#L248) attempts to compensate for changes in viewport size and content scale. If you run into problems in your project, this is where you want to look at first.
 
 
 #### Depth fade in DFOutlineNode
