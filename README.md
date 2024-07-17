@@ -145,7 +145,7 @@ The actual content on the screen, like how many objects there are, or how many o
 
 ### Choosing between versions
 
-In this project, both versions have similar visual quality, but DFOutlineCE has depth fade feature, and DFOutlineNode does not.
+In this project, both versions have similar visual quality, but only DFOutlineCE has depth fade feature.
 
 ***DFOutlineCE*** is significantly faster than ***DFOutlineNode***. But, depending on your project and the target hardware, performance may be good enough for both that it's not a deciding factor.
 
