@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=78 format=3 uid="uid://dmbykrvhlytsq"]
+[gd_resource type="Theme" load_steps=79 format=3 uid="uid://dmbykrvhlytsq"]
 
 [ext_resource type="FontFile" uid="uid://rl84423btu8g" path="res://main/theme/fonts/roboto/roboto-bold.ttf" id="1_3hfbc"]
 [ext_resource type="FontFile" uid="uid://dj7toqnvorx6d" path="res://main/theme/fonts/roboto/roboto-medium.ttf" id="1_eu0gv"]
@@ -97,6 +97,8 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_aifbf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ciqa"]
 
@@ -255,7 +257,10 @@ Button/styles/normal = ExtResource("4_55lo4")
 Button/styles/pressed = SubResource("StyleBoxFlat_32ijn")
 CheckBox/fonts/font = ExtResource("1_eu0gv")
 CheckBox/icons/checked = ExtResource("4_hbaii")
+CheckBox/icons/checked_disabled = ExtResource("4_hbaii")
 CheckBox/icons/unchecked = ExtResource("5_82t3y")
+CheckBox/icons/unchecked_disabled = ExtResource("5_82t3y")
+CheckBox/styles/disabled = SubResource("StyleBoxEmpty_aifbf")
 CheckBox/styles/focus = SubResource("StyleBoxEmpty_5ciqa")
 CheckBox/styles/hover = SubResource("StyleBoxEmpty_qp6gu")
 CheckBox/styles/hover_pressed = SubResource("StyleBoxEmpty_0yckn")

@@ -17,9 +17,20 @@ enum State {
 @export var frames_to_wait := 10
 @export var frames_to_record := 1000
 
-var state := State.WAITING
+var state := State.WAITING :
+	set(value):
+		if state == value:
+			return
+		state = value
+		if mouse_block_control:
+			if state == State.WAITING:
+				mouse_block_control.hide()
+			else:
+				mouse_block_control.show()
 var base_file_path : String
 
+
+@onready var mouse_block_control: Control = %MouseBlockControl
 @onready var save_panel: PopupPanel = %SavePanel
 @onready var results_panel: PopupPanel = %ResultsPanel
 
@@ -37,6 +48,13 @@ func _ready() -> void:
 	save_panel.cancel_pressed.connect(_on_SavePanel_cancel_pressed)
 	results_panel.close_pressed.connect(_on_ResultsPanel_close_pressed)
 
+	save_panel.set_flag(Window.FLAG_POPUP, false)
+	save_panel.hide()
+
+	results_panel.set_flag(Window.FLAG_POPUP, false)
+	results_panel.hide()
+
+
 
 func _input(event: InputEvent) -> void:
 	if not state == State.WAITING:
@@ -44,7 +62,7 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed(ACTION_NAME):
 		state = State.SAVE_PANEL
-		save_panel.popup_centered()
+		save_panel.popup_centered_clamped()
 
 
 func _on_SavePanel_start_pressed(p_file_path : String) -> void:
@@ -78,7 +96,7 @@ func _on_PerformanceMonitor_recording_completed(p_record : PerformanceRecord) ->
 
 	if not results_panel.visibility_changed.is_connected(_on_ResultsPanel_visibility_changed):
 		results_panel.visibility_changed.connect(_on_ResultsPanel_visibility_changed)
-	results_panel.popup()
+	results_panel.popup_centered_clamped()
 
 
 func _on_ResultsPanel_visibility_changed() -> void:

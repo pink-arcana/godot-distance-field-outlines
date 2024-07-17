@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_656wk"]
 script = ExtResource("3_gfja8")
-outline_width = 1024
+outline_width = 1024.0
 viewport_size = Vector2i(1920, 1080)
 reset_viewport_size = false
 sobel_threshold = 0.05

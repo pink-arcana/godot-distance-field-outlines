@@ -8,9 +8,6 @@ uniform float distance_denominator;
 uniform vec4 input_outline_color;
 uniform vec4 background_color : source_color;
 uniform bool use_background_color;
-uniform int depth_fade_mode;
-uniform float depth_fade_start;
-uniform float depth_fade_end;
 uniform float min_outline_alpha;
 uniform float min_outline_distance;
 uniform int effect_id;
@@ -21,6 +18,7 @@ uniform float smoothing_distance;
 const int FX_NONE = 0;
 const int FX_BOX_BLUR = 1;
 const int FX_SMOOTHING = 2;
+const int FX_SUBPIXEL = 3;
 const int FX_PADDING = 4;
 const int FX_INVERTED = 5;
 const int FX_SKETCH = 6;
@@ -29,14 +27,7 @@ const int FX_RAINBOW_ANIMATION = 8;
 const int FX_STEPPED_DISTANCE_FIELD = 9;
 const int FX_RAW_DISTANCE_FIELD = 10;
 
-// Depth fade mode
-// Values should match DepthFadeMode enum.
-const int DEPTH_FADE_MODE_NONE = 0;
-const int DEPTH_FADE_MODE_ALPHA = 1;
-const int DEPTH_FADE_MODE_WIDTH = 2;
-const int DEPTH_FADE_MODE_ALPHA_AND_WIDTH = 3;
-
-#include "utils.gdshaderinc"
+#include "includes/utils.gdshaderinc"
 
 // ---------------------------------------------------------------------------
 // 2D Noise function adapted from Morgan McGuire @morgan3d (BSD license)
@@ -63,24 +54,6 @@ float remap(float p_value, float p_in_min, float p_in_max, float p_out_min, floa
     return p_out_min + (p_out_max - p_out_min) * (p_value - p_in_min)/(p_in_max - p_in_min);
 }
 
-
-float get_outline_distance(float p_depth_value, int p_mode, float p_dist_min, float p_dist_max) {
-    if (p_mode == DEPTH_FADE_MODE_WIDTH || p_mode == DEPTH_FADE_MODE_ALPHA_AND_WIDTH) {
-        return remap(p_depth_value, 0.0, 1.0, p_dist_min, p_dist_max);
-    } else {
-        return p_dist_max;
-    }
-}
-
-
-float get_outline_alpha(float p_depth_value, int p_mode, float p_alpha_min, float p_alpha_max) {
-    if (p_mode == DEPTH_FADE_MODE_ALPHA || p_mode == DEPTH_FADE_MODE_ALPHA_AND_WIDTH) {
-        return remap(p_depth_value, 0.0, 1.0, p_alpha_min, p_alpha_max);
-    } else {
-        return p_alpha_max;
-    }
-}
-
 void fragment() {
 	vec2 texture_size = vec2(textureSize(df_texture, 0));
 	vec2 pixel_size = 1.0/texture_size;
@@ -92,23 +65,8 @@ void fragment() {
 	float dist_n = df_color.r;
     float dist = dist_n * distance_denominator;
 
-    float depth_n = df_color.g;
-    float depth = depth_n * depth_fade_end;
-    float depth_value = 1.0 - smoothstep(depth_fade_start, depth_fade_end, depth);
-
 	vec4 outline_color = input_outline_color;
-	outline_color.a = get_outline_alpha(
-        depth_value,
-        depth_fade_mode,
-        min_outline_alpha,
-        outline_color.a);
-
 	float outline_distance = input_outline_distance;
-    outline_distance = get_outline_distance(
-        depth_value,
-        depth_fade_mode,
-        min_outline_distance,
-        outline_distance);
 
 	// We will keep our color_texture color in SRGB.
 	// Since we are in a CanvasItem shader here, our output should be
@@ -133,14 +91,14 @@ void fragment() {
         // For most cases, hardware sampling and/or a more advanced algorithm is probably preferred.
         float neighbor_sum = 0.0;
 
-        for (int i = 0; i < NEIGHBORS.length(); i++) {
-            ivec2 neighbor_coord = ivec2(tex_coord + NEIGHBORS[i]);
+        for (int i = 0; i < KERNEL_OFFSETS.length(); i++) {
+            ivec2 neighbor_coord = ivec2(tex_coord + KERNEL_OFFSETS[i]);
             float neighbor_dist = texelFetch(df_texture, neighbor_coord, 0).r * distance_denominator;
             float neighbor_outline_mix = neighbor_dist <= outline_distance ? 1.0 : 0.0;
             neighbor_sum += neighbor_outline_mix;
         }
 
-        float outline_mix  = neighbor_sum / float(NEIGHBORS.length());
+        float outline_mix  = neighbor_sum / float(KERNEL_OFFSETS.length());
         color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
 
     } else if (effect_id == FX_SMOOTHING) {
@@ -150,6 +108,15 @@ void fragment() {
         float dist_max = outline_distance;
         float outline_mix = 1.0 - smoothstep(dist_min, dist_max, dist);
         color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+
+	} else if (effect_id == FX_SUBPIXEL) {
+        float outline_mix = dist <= outline_distance ? 1.0 : 0.0;
+        bool is_at_edge = dist < ceil(outline_distance + 0.0001) && dist >= floor(outline_distance);
+        float fract_dist = dist - outline_distance;
+        outline_mix = is_at_edge ? 1.0 - fract_dist : outline_mix;
+        color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+
+
 
     } else if (effect_id == FX_PADDING || effect_id == FX_INVERTED) {
         // This section creates a framework for controlling the inside

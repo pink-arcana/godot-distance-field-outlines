@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxnt2vfgj6m6d"]
+[gd_scene load_steps=7 format=3 uid="uid://bxnt2vfgj6m6d"]
 
 [ext_resource type="PackedScene" uid="uid://525owkemmwph" path="res://main/demo_scenes/platformer/platformer.tscn" id="1_gqdip"]
 [ext_resource type="Script" path="res://df_outline_ce/df_outline_ce.gd" id="2_n1bsa"]
@@ -6,18 +6,18 @@
 
 [sub_resource type="Resource" id="Resource_ap3gw"]
 script = ExtResource("2_vymfd")
-outline_width = 18
+outline_width = 8.0
 viewport_size = Vector2i(1920, 1080)
 reset_viewport_size = false
-sobel_threshold = 0.25
-outline_effect = 4
+sobel_threshold = 0.1
+outline_effect = 0
 outline_color = Color(0, 0, 0, 1)
 background_color = Color(1, 1, 1, 1)
 use_background_color = false
 smoothing_distance = 1.5
 depth_fade_mode = 0
-depth_fade_start = 4.0
-depth_fade_end = 40.0
+depth_fade_start = 1.0
+depth_fade_end = 150.0
 min_outline_width = 4.0
 min_outline_alpha = 0.0
 
@@ -27,32 +27,19 @@ resource_name = ""
 enabled = true
 effect_callback_type = 4
 needs_motion_vectors = false
-needs_normal_roughness = false
+needs_normal_roughness = true
 script = ExtResource("2_n1bsa")
 outline_settings = SubResource("Resource_ap3gw")
 print_jfa_updates = false
 print_buffer_resize = false
+print_freed_rids = false
 
 [sub_resource type="Compositor" id="Compositor_1xa5a"]
 compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_8dpe4")])
 
-[sub_resource type="Animation" id="Animation_m5kms"]
-resource_name = "new_animation"
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_x6rlq"]
-_data = {
-"new_animation": SubResource("Animation_m5kms")
-}
-
 [node name="PlatformerCE" type="Node3D"]
 
 [node name="Platformer" parent="." instance=ExtResource("1_gqdip")]
-
-[node name="GimbalY" parent="Platformer/CameraGimbal" index="0"]
-transform = Transform3D(12.9997, 0, -0.0841766, 0, 13, 0, 0.0841766, 0, 12.9997, 0, 0, 0)
-
-[node name="GimbalX" parent="Platformer/CameraGimbal/GimbalY" index="0"]
-transform = Transform3D(1, 0, 0, 0, 0.980615, 0.195946, 0, -0.195946, 0.980615, 0, 0, 0)
 
 [node name="Camera3D" parent="Platformer/CameraGimbal/GimbalY/GimbalX" index="0" groups=["DFCamera"]]
 compositor = SubResource("Compositor_1xa5a")

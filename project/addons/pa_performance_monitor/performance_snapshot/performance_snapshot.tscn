@@ -12,10 +12,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+mouse_force_pass_scroll_events = false
 script = ExtResource("1_t4tmf")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 128
+
+[node name="MouseBlockControl" type="Control" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
 
 [node name="ResultsPanel" parent="CanvasLayer" instance=ExtResource("2_yxfph")]
 unique_name_in_owner = true

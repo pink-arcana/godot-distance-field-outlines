@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bofa5ksa8loil"]
+[gd_scene load_steps=3 format=3 uid="uid://bofa5ksa8loil"]
 
 [ext_resource type="Script" path="res://df_outline_node/df_outline_node.gd" id="1_qa00k"]
 [ext_resource type="Script" path="res://df_outline_node/sub_viewports/df_node_sub_viewport.gd" id="2_ot3ti"]
-[ext_resource type="Environment" uid="uid://cxgxkblneoha" path="res://df_outline_node/sub_viewports/depth_environment.tres" id="3_51evk"]
 
 [node name="DFOutlineNode" type="Node3D"]
 script = ExtResource("1_qa00k")
@@ -10,8 +9,3 @@ script = ExtResource("1_qa00k")
 [node name="ColorSubViewport" type="SubViewport" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_ot3ti")
-
-[node name="DepthSubViewport" type="SubViewport" parent="."]
-unique_name_in_owner = true
-script = ExtResource("2_ot3ti")
-custom_environment = ExtResource("3_51evk")

@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://elv7i1a3al8k" path="res://main/gui_layer/menu_panel/menu_panel.tscn" id="10_18248"]
 
 [node name="GUILayer" type="CanvasLayer"]
-layer = 128
+layer = 120
 script = ExtResource("1_ootin")
 
 [node name="TouchButtons" parent="." instance=ExtResource("2_u50pr")]

@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cwf7g6b4gvrei"
+path="res://.godot/imported/df_data.glsl-b08648a5a3d176c1acab0e992d40bb58.res"
+
+[deps]
+
+source_file="res://df_outline_ce/includes/df_data.glsl"
+dest_files=["res://.godot/imported/df_data.glsl-b08648a5a3d176c1acab0e992d40bb58.res"]
+
+[params]
+

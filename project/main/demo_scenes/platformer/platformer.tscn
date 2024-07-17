@@ -34,19 +34,4 @@ far = 150.0
 
 [node name="platformer" parent="." instance=ExtResource("2_hpl7p")]
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6489, 16.0971, 20.2885)
-omni_range = 30.0
-omni_attenuation = 0.686
-
-[node name="OmniLight3D2" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.351, 10.7825, -0.413659)
-omni_range = 30.0
-omni_attenuation = 0.686
-
-[node name="OmniLight3D3" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.952, 15.9131, -1.0893)
-omni_range = 30.0
-omni_attenuation = 0.47
-
 [editable path="CameraGimbal"]

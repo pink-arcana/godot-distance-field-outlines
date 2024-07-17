@@ -15,7 +15,7 @@ const float Y_KERNEL[9] = {
 	1.0, 2.0, 1.0};
 
 
-#include "utils.gdshaderinc"
+#include "includes/utils.gdshaderinc"
 
 
 // We receive the SubViewport's color texture in SRGB colorspace.
@@ -23,8 +23,8 @@ const float Y_KERNEL[9] = {
 // to our CompositorEffect shader.
 vec4[9] get_neighbor_colors(vec2 p_tex_coord, vec2 p_texture_size) {
 	vec4 colors[9];
-	for (int i = 0; i < NEIGHBORS.length(); i++) {
-		vec2 offset = NEIGHBORS[i];
+	for (int i = 0; i < KERNEL_OFFSETS.length(); i++) {
+		vec2 offset = KERNEL_OFFSETS[i];
 		vec2 neighbor_coord = p_tex_coord + offset;
 		neighbor_coord.x = clamp(neighbor_coord.x, 0.0, p_texture_size.x - 1.0);
 		neighbor_coord.y = clamp(neighbor_coord.y, 0.0, p_texture_size.y - 1.0);

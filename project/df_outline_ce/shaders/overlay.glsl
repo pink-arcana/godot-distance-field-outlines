@@ -1,135 +1,21 @@
 #[compute]
 #version 450
 
-struct SceneData {
-	highp mat4 projection_matrix;
-	highp mat4 inv_projection_matrix;
-	highp mat4 inv_view_matrix;
-	highp mat4 view_matrix;
+#define DEBUG
 
-	// only used for multiview
-	highp mat4 projection_matrix_view[2];
-	highp mat4 inv_projection_matrix_view[2];
-	highp vec4 eye_offset[2];
-
-	// Used for billboards to cast correct shadows.
-	highp mat4 main_cam_inv_view_matrix;
-
-	highp vec2 viewport_size;
-	highp vec2 screen_pixel_size;
-
-	// Use vec4s because std140 doesn't play nice with vec2s, z and w are wasted.
-	highp vec4 directional_penumbra_shadow_kernel[32];
-	highp vec4 directional_soft_shadow_kernel[32];
-	highp vec4 penumbra_shadow_kernel[32];
-	highp vec4 soft_shadow_kernel[32];
-
-	mediump mat3 radiance_inverse_xform;
-
-	mediump vec4 ambient_light_color_energy;
-
-	mediump float ambient_color_sky_mix;
-	bool use_ambient_light;
-	bool use_ambient_cubemap;
-	bool use_reflection_cubemap;
-
-	highp vec2 shadow_atlas_pixel_size;
-	highp vec2 directional_shadow_pixel_size;
-
-	uint directional_light_count;
-	mediump float dual_paraboloid_side;
-	highp float z_far;
-	highp float z_near;
-
-	bool roughness_limiter_enabled;
-	mediump float roughness_limiter_amount;
-	mediump float roughness_limiter_limit;
-	mediump float opaque_prepass_threshold;
-
-	bool fog_enabled;
-	uint fog_mode;
-	highp float fog_density;
-	highp float fog_height;
-	highp float fog_height_density;
-
-	highp float fog_depth_curve;
-	highp float pad;
-	highp float fog_depth_begin;
-
-	mediump vec3 fog_light_color;
-	highp float fog_depth_end;
-
-	mediump float fog_sun_scatter;
-	mediump float fog_aerial_perspective;
-	highp float time;
-	mediump float reflection_multiplier; // one normally, zero when rendering reflections
-
-	vec2 taa_jitter;
-	bool material_uv2_mode;
-	float emissive_exposure_normalization;
-
-	float IBL_exposure_normalization;
-	bool pancake_shadows;
-	uint camera_visible_layers;
-	float pass_alpha_multiplier;
-};
-
-struct DFOutlineData {
-	vec4 outline_color;
-	vec4 background_color;
-	float outline_distance;
-	float distance_denominator;
-	float use_background_color;
-	float sobel_threshold;
-	float depth_fade_start;
-    float depth_fade_end;
-    float min_outline_alpha;
-    float min_outline_distance;
-	float smoothing_distance;
-	float res;
-	float res2;
-	float res3;
-};
+#include "includes/scene_data.glsl"
+#include "includes/scene_data_helpers.glsl"
+#include "includes/df_header.glsl"
 
 layout(constant_id = 0) const int EFFECT_ID = 0;
 layout(constant_id = 1) const int DEPTH_FADE_MODE = 0;
 
-layout(local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+#ifdef DEBUG
+layout(rgba16f, set = 1, binding = 1) uniform restrict writeonly image2D debug_image;
+#endif // DEBUG
 
-layout(set = 0, binding = 0, std140) uniform SceneDataBlock {
-	SceneData data;
-	SceneData prev_data;
-}
-scene;
-
-layout(set = 0, binding = 1, std140) uniform DFOutlineBlock {
-	DFOutlineData data;
-} df;
-
-layout(rgba16f, set = 0, binding = 2) uniform restrict image2D color_image;
-layout(set = 1, binding = 0) uniform sampler2D df_sampler;
-
-const float EPSILON = 0.001;
-
-// Effect IDs
-// Values should match OutlineEffect enum in OutlineSettings class.
-const int FX_NONE = 0;
-const int FX_BOX_BLUR = 1;
-const int FX_SMOOTHING = 2;
-const int FX_PADDING = 4;
-const int FX_INVERTED = 5;
-const int FX_SKETCH = 6;
-const int FX_NEON_GLOW = 7;
-const int FX_RAINBOW_ANIMATION = 8;
-const int FX_STEPPED_DISTANCE_FIELD = 9;
-const int FX_RAW_DISTANCE_FIELD = 10;
-
-// Depth fade mode
-// Values should match DepthFadeMode enum in OutlineSettings class.
-const int DEPTH_FADE_MODE_NONE = 0;
-const int DEPTH_FADE_MODE_ALPHA = 1;
-const int DEPTH_FADE_MODE_WIDTH = 2;
-const int DEPTH_FADE_MODE_ALPHA_AND_WIDTH = 3;
+layout(rg16f, set = 0, binding = 1) uniform restrict image2D color_image;
+layout(set = 2, binding = 1) uniform sampler2D df_sampler;
 
 // ---------------------------------------------------------------------------
 // 2D Noise function adapted from Morgan McGuire @morgan3d (BSD license)
@@ -177,28 +63,6 @@ vec4 srgb_to_linear(vec4 color) {
 }
 // ---------------------------------------------------------------------------
 
-float remap(float p_value, float p_in_min, float p_in_max, float p_out_min, float p_out_max) {
-    return p_out_min + (p_out_max - p_out_min) * (p_value - p_in_min)/(p_in_max - p_in_min);
-}
-
-
-float get_outline_distance(float p_depth_value, int p_mode, float p_dist_min, float p_dist_max) {
-    if (p_mode == DEPTH_FADE_MODE_WIDTH || p_mode == DEPTH_FADE_MODE_ALPHA_AND_WIDTH) {
-        return remap(p_depth_value, 0.0, 1.0, p_dist_min, p_dist_max);
-    } else {
-        return p_dist_max;
-    }
-}
-
-
-float get_outline_alpha(float p_depth_value, int p_mode, float p_alpha_min, float p_alpha_max) {
-    if (p_mode == DEPTH_FADE_MODE_ALPHA || p_mode == DEPTH_FADE_MODE_ALPHA_AND_WIDTH) {
-        return remap(p_depth_value, 0.0, 1.0, p_alpha_min, p_alpha_max);
-    } else {
-        return p_alpha_max;
-    }
-}
-
 
 void main() {
     SceneData scene_data = scene.data;
@@ -217,34 +81,18 @@ void main() {
 	ivec2 image_coord = ivec2(gl_GlobalInvocationID.xy);
     vec2 uv = (image_coord + 0.5) / viewport_size;
 
-    vec4 df_color = texelFetch(df_sampler, image_coord, 0);
+    vec2 df_color = texelFetch(df_sampler, image_coord, 0).rg;
     float dist_n = df_color.r;
     float dist = dist_n * distance_denominator;
 
-    // This is the linear depth of the outline seed,
-    // as calculated in the last JF pass.
-    float depth_n = df_color.g;
-    float depth = depth_n * depth_fade_end;
-    float depth_value = 1.0 - smoothstep(depth_fade_start, depth_fade_end, depth);
+    float depth_value = df_color.g;
+    outline_color.a = get_outline_alpha(depth_value, DEPTH_FADE_MODE);
+    outline_distance = get_outline_distance(depth_value, DEPTH_FADE_MODE);
 
-    outline_color.a = get_outline_alpha(
-        depth_value,
-        DEPTH_FADE_MODE,
-        min_outline_alpha,
-        outline_color.a);
+    vec4 viewport_color = use_background_color ? background_color : imageLoad(color_image, image_coord);
 
-    outline_distance = get_outline_distance(
-        depth_value,
-        DEPTH_FADE_MODE,
-        min_outline_distance,
-        outline_distance);
-
-    vec4 source_color = use_background_color ? background_color : imageLoad(color_image, image_coord);
-
-    // Not a real early exit, probably. But in certain cases,
-    // you might get the whole workgroup to take this branch.
     if (outline_distance < EPSILON) {
-        imageStore(color_image, image_coord, source_color);
+        imageStore(color_image, image_coord, viewport_color);
         return;
     }
 
@@ -255,31 +103,26 @@ void main() {
     // see https://drewcassidy.me/2020/06/26/sdf-antialiasing/
 
     vec4 color = vec4(1.0);
-    color.a = source_color.a;
+    color.a = viewport_color.a;
     color.a += dist < outline_distance ? 1.0 : 0.0;
 
     if (EFFECT_ID == FX_NONE) {
         float outline_mix = dist <= outline_distance ? 1.0 : 0.0;
-        color.rgb = mix(source_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+        color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+
     } else if (EFFECT_ID == FX_BOX_BLUR) {
         // A basic example of anti-aliasing to demonstrate neighbor sampling.
-        // For most cases, hardware sampling and/or a more advanced algorithm is probably preferred.
-        const ivec2 NEIGHBORS[9] = {
-            ivec2(-1,-1), ivec2(0,-1), ivec2(1,-1),
-            ivec2(-1,0), ivec2(0,0), ivec2(1,0),
-            ivec2(-1,1), ivec2(0,1), ivec2(1,1) };
-
         float neighbor_sum = 0.0;
 
-        for (int i = 0; i < NEIGHBORS.length(); i++) {
-            ivec2 neighbor_coord = image_coord + NEIGHBORS[i];
+        for (int i = 0; i < KERNEL_OFFSETS.length(); i++) {
+            ivec2 neighbor_coord = image_coord + KERNEL_OFFSETS[i];
             float neighbor_dist = texelFetch(df_sampler, neighbor_coord, 0).r * distance_denominator;
             float neighbor_outline_mix = neighbor_dist <= outline_distance ? 1.0 : 0.0;
             neighbor_sum += neighbor_outline_mix;
         }
 
-        float outline_mix  = neighbor_sum / NEIGHBORS.length();
-        color.rgb = mix(source_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+        float outline_mix  = neighbor_sum / KERNEL_OFFSETS.length();
+        color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
 
     } else if (EFFECT_ID == FX_SMOOTHING) {
         // Subtracting only will make outlines thinner, but ensure that smoothing doesn't break
@@ -287,7 +130,18 @@ void main() {
         float dist_min = outline_distance - smoothing_distance * 2.0;
         float dist_max = outline_distance;
         float outline_mix = 1.0 - smoothstep(dist_min, dist_max, dist);
-        color.rgb = mix(source_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+        color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+
+    } else if (EFFECT_ID == FX_SUBPIXEL) {
+        float outline_mix = dist <= outline_distance ? 1.0 : 0.0;
+        bool is_at_edge = dist < ceil(outline_distance + 0.0001) && dist >= floor(outline_distance);
+        float fract_dist = dist - outline_distance;
+        outline_mix = is_at_edge ? 1.0 - fract_dist : outline_mix;
+        color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+
+        #ifdef DEBUG
+        imageStore(debug_image, image_coord, vec4(outline_distance, dist, fract_dist, is_at_edge));
+        #endif // DEBUG
 
     } else if (EFFECT_ID == FX_PADDING || EFFECT_ID == FX_INVERTED) {
         // This section creates a framework for controlling the inside
@@ -306,7 +160,7 @@ void main() {
         if (EFFECT_ID == FX_INVERTED) {
             invert_outlines = true;
             inner_outline = true;
-            inner_color = source_color;
+            inner_color = viewport_color;
             edge_width = max(1.0, outline_distance * 0.25);
         }
 
@@ -320,7 +174,7 @@ void main() {
 
         outline_mix = invert_outlines ? 1.0 - outline_mix : outline_mix;
 
-        color.rgb = mix(source_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+        color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
         color.rgb = inner_outline ? mix(color.rgb, inner_color.rgb, (inner_mix - outline_mix) * outline_color.a) : color.rgb;
 
     } else if (EFFECT_ID == FX_SKETCH) {
@@ -336,13 +190,13 @@ void main() {
             outline_mix = dist < max_dist ? 1.0 : 0.0;
             outline_mix += dist < max_sketch_dist && dist >= min_sketch_dist ? 1.0 : 0.0;
         }
-        color.rgb = mix(source_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
+        color.rgb = mix(viewport_color.rgb, outline_color.rgb, outline_mix * outline_color.a);
 
     } else if (EFFECT_ID == FX_NEON_GLOW) {
         // adapted from:
         // https://shaderfun.com/2018/07/01/signed-distance-fields-part-7-some-simple-effects/
 
-        color.rgb = source_color.rgb;
+        color.rgb = viewport_color.rgb;
         if (dist <= outline_distance) {
             float value = 1.0 - dist / outline_distance;
             vec4 glow_low = outline_color;
@@ -397,12 +251,12 @@ void main() {
                 }
             }
         }
-        color.rgb = mix(rainbow_color.rgb, source_color.rgb, fade_mix);
+        color.rgb = mix(rainbow_color.rgb, viewport_color.rgb, fade_mix);
 
     } else if (EFFECT_ID == FX_STEPPED_DISTANCE_FIELD) {
         // Adapted from Disk - distance 2D Copyright 2020 Inigo Quilez
         // MIT License: https://www.shadertoy.com/view/3ltSW2
-        color.rgb = source_color.rgb;
+        color.rgb = viewport_color.rgb;
         float stripe_width = 64.0;
 
         if (dist <= outline_distance) {

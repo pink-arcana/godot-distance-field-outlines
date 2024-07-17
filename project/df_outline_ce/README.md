@@ -18,6 +18,13 @@ See the main Distance Field Outlines [README](https://github.com/pink-arcana/god
         - Depending on the stage you choose, checkboxes will appear to toggle additional buffers. You can ignore them. DFOutlineCE automatically sets the values it requires.
     - Click on or create `DFOutlineSettings` to open the settings. (See [Settings](https://github.com/pink-arcana/godot-distance-field-outlines#settings) in the main README.)
 
+
+### Customizing outline extraction
+The `extraction.glsl` shader uses a color Sobel to find outlines. However, you can customize this to use other screen-space outline extraction algorithms. Normal/roughness and depth buffers are available by default, along with transform matrices and other useful variables. This means that you should be able to port any Quadmesh outline shaders from [Godot shaders](https://godotshaders.com/) to use here.
+
+Instructions for accessing the buffers and variables are in [`extraction.glsl`](project/df_outline_ce/shaders/extraction.glsl).
+
+
 ### Previewing in the editor
 
 #### On a WorldEnvironment node

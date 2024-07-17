@@ -14,6 +14,12 @@ const DF_OUTLINE_SCENE_TYPES := [
 		DemoScene.SceneType.NODE,
 	]
 
+
+const TOOLTIP_DEPTH_FADE_REQUIRES_COMPOSITOR := "Depth fade is only available for CompositorEffects."
+const TOOLTIP_COMPOSITOR_EFFECT_WEB := "\nTo preview the CompositorEffect, please download \
+		the project from the Github repo."
+const TOOLTIP_DEPTH_FADE_INCOMPATIBLE := "Depth fade is not compatible with outline effects."
+
 const TOOLTIP_REQUIRES_FORWARD_PLUS := "CompositorEffect is not available for \
 		web builds.\n To preview the CompositorEffect, please download \
 		the project from the Github repo."
@@ -24,6 +30,8 @@ const SCENE_TYPE_TOOLTIPS := {
 	}
 
 @export var demo_scenes : Array[DemoScene]
+
+var tooltip_depth_fade_requires_compositor : String
 
 var prev_demo_scene : DemoScene
 var demo_scene : DemoScene
@@ -45,12 +53,16 @@ var demo_scene_type := DemoScene.SceneType.NONE
 @onready var white_background_button: CheckBox = %WhiteBackgroundButton
 @onready var width_slider: HSlider = %WidthSlider
 @onready var width_label: Label = %WidthLabel
-@onready var width_fade_checkbox: CheckBox = %WidthFadeCheckbox
-@onready var alpha_fade_checkbox: CheckBox = %AlphaFadeCheckbox
+@onready var width_fade_checkbox: IconCheckBox = %WidthFadeCheckbox
+@onready var alpha_fade_checkbox: IconCheckBox = %AlphaFadeCheckbox
 
 
 
 func _ready() -> void:
+	tooltip_depth_fade_requires_compositor = TOOLTIP_DEPTH_FADE_REQUIRES_COMPOSITOR
+	if OS.has_feature("web"):
+		tooltip_depth_fade_requires_compositor += TOOLTIP_COMPOSITOR_EFFECT_WEB
+
 	setup_buttons()
 	Events.scene_loaded.connect(_on_Events_scene_loaded)
 	Events.settings_changed.connect(_on_Events_settings_changed)
@@ -154,21 +166,39 @@ func update_controls_from_settings() -> void:
 
 	white_background_button.set_pressed_no_signal(Demo.settings.use_background_color)
 
-	if not alpha_fade_checkbox.disabled:
+	var allow_depth := true
+	if Demo.scene_type != DemoScene.SceneType.COMPOSITOR_EFFECT:
+		allow_depth = false
+		alpha_fade_checkbox.tooltip_text = tooltip_depth_fade_requires_compositor
+		width_fade_checkbox.tooltip_text = tooltip_depth_fade_requires_compositor
+	elif Demo.settings.outline_effect != DFOutlineSettings.EffectID.NONE:
+		allow_depth = false
+		alpha_fade_checkbox.tooltip_text = TOOLTIP_DEPTH_FADE_INCOMPATIBLE
+		width_fade_checkbox.tooltip_text = TOOLTIP_DEPTH_FADE_INCOMPATIBLE
+	else:
+		alpha_fade_checkbox.tooltip_text = "Fade outline opacity by depth."
+		width_fade_checkbox.tooltip_text = "Fade outline width by depth."
+
+	alpha_fade_checkbox.set_checkbox_disabled(not allow_depth)
+	width_fade_checkbox.set_checkbox_disabled(not allow_depth)
+
+	if alpha_fade_checkbox.disabled:
+		alpha_fade_checkbox.button_pressed = false
+	else:
 		alpha_fade_checkbox.set_pressed_no_signal(
 				Demo.settings.depth_fade_mode in [
 						DFOutlineSettings.DepthFadeMode.ALPHA,
 						DFOutlineSettings.DepthFadeMode.ALPHA_AND_WIDTH,
-					],
-			)
+				])
 
-	if not width_fade_checkbox.disabled:
+	if width_fade_checkbox.disabled:
+		width_fade_checkbox.button_pressed = false
+	else:
 		width_fade_checkbox.set_pressed_no_signal(
 				Demo.settings.depth_fade_mode in [
 						DFOutlineSettings.DepthFadeMode.WIDTH,
 						DFOutlineSettings.DepthFadeMode.ALPHA_AND_WIDTH,
-					],
-			)
+				])
 
 
 
@@ -247,6 +277,7 @@ func _on_Events_scene_loaded(
 
 	if demo_scene_type in DF_OUTLINE_SCENE_TYPES:
 		outline_settings_container.show()
+		update_controls_from_settings()
 	else:
 		outline_settings_container.hide()
 

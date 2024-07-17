@@ -3,8 +3,9 @@ extends Object
 
 const EffectDisplayNames := {
 	DFOutlineSettings.EffectID.NONE : "None",
-	#DFOutlineSettings.EffectID.BOX_BLUR : "Box Blur",
-	DFOutlineSettings.EffectID.SMOOTHING : "Smoothing",
+	DFOutlineSettings.EffectID.BOX_BLUR : "Box Blur",
+	DFOutlineSettings.EffectID.SMOOTHING : "Smoothstep Anti-aliasing",
+	DFOutlineSettings.EffectID.SUBPIXEL_AA : "Subpixel Anti-aliasing",
 	DFOutlineSettings.EffectID.RAW_DISTANCE_FIELD : "Distance Field (No effect)",
 	DFOutlineSettings.EffectID.STEPPED_DISTANCE_FIELD : "Distance Field (Stripes)",
 	DFOutlineSettings.EffectID.PADDING : "Inner Padding",

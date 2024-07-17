@@ -5,20 +5,20 @@
 
 [sub_resource type="Resource" id="Resource_6yiy1"]
 script = ExtResource("1_gdrsr")
-outline_width = 8
+outline_width = 8.0
 viewport_size = Vector2i(1920, 1080)
 reset_viewport_size = false
-sobel_threshold = 0.25
+sobel_threshold = 0.1
 outline_effect = 0
-outline_color = Color(0, 0, 0, 1)
+outline_color = Color(0.141176, 0.141176, 0.203922, 1)
 background_color = Color(1, 1, 1, 1)
 use_background_color = false
 smoothing_distance = 1.5
 depth_fade_mode = 0
 depth_fade_start = 4.0
-depth_fade_end = 40.0
-min_outline_width = 4.0
-min_outline_alpha = 0.0
+depth_fade_end = 100.0
+min_outline_width = 2.0
+min_outline_alpha = 0.75
 
 [resource]
 script = ExtResource("1_rem2n")

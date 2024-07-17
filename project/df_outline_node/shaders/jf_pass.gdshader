@@ -2,13 +2,12 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform sampler2D in_texture : hint_screen_texture, filter_nearest, repeat_disable;
-uniform sampler2D depth_texture : source_color, filter_nearest, repeat_disable;
 
 uniform float distance_denominator;
 uniform float offset;
 uniform bool last_pass;
 
-#include "utils.gdshaderinc"
+#include "includes/utils.gdshaderinc"
 
 
 float dist_squared(highp vec2 coord_a, highp vec2 coord_b) {
@@ -32,8 +31,8 @@ void fragment() {
 	highp vec2 seed_coord = coord_data.coord;
 	highp float min_dist_sq = valid_seed ? dist_squared(tex_coord, seed_coord) : 1000000.0;
 
-	for (int i = 0; i < NEIGHBORS_ONLY.length(); i++) {
-		highp vec2 neighbor_coord = (NEIGHBORS_ONLY[i] * offset) + tex_coord;
+	for (int i = 0; i < NEIGHBOR_OFFSETS.length(); i++) {
+		highp vec2 neighbor_coord = (NEIGHBOR_OFFSETS[i] * offset) + tex_coord;
 		neighbor_coord = vec2(
 			clamp(neighbor_coord.x, 0.0, texture_size.x - 1.0),
 			clamp(neighbor_coord.y, 0.0, texture_size.y - 1.0));
@@ -56,12 +55,8 @@ void fragment() {
 		// and normalize it by dividing by distance_denominator.
 		// If we do not have a valid seed, we assign the maximum distance (1.0).
 		float min_dist_n = valid_seed ? sqrt(min_dist_sq) / distance_denominator : 1.0;
-
-		// In the green channel, we will store the depth of the seed position.
-		// Our custom depth_texture contains the normalized *linear depth*.
 		vec2 seed_uv = seed_coord * pixel_size;
-		float linear_depth_n = valid_seed ? srgb_to_linear(textureLod(depth_texture, seed_uv, 0.0)).r : 1.0;
-		COLOR.rg = vec2(min_dist_n, linear_depth_n);
+		COLOR.r = min_dist_n;
 	} else {
 		COLOR = seed_color;
 	}

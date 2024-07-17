@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://w52r7tvc55i5"
+path="res://.godot/imported/extraction.glsl-51c2fd873ed49870353894b68d50aeef.res"
+
+[deps]
+
+source_file="res://df_outline_ce/shaders/extraction.glsl"
+dest_files=["res://.godot/imported/extraction.glsl-51c2fd873ed49870353894b68d50aeef.res"]
+
+[params]
+

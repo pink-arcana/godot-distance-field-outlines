@@ -23,6 +23,7 @@ This Godot 4.3 demo project uses **distance fields** to create **wide and perfor
 - [Settings](#settings)
     - [Outline width](#outline-width)
     - [Outline effects](#outline-effects)
+    - [Anti-aliasing](#anti-aliasing)
     - [Depth fade](#depth-fade)
     - [Changing settings at runtime](#changing-settings-at-runtime)
     - [Animation](#animation)
@@ -118,7 +119,7 @@ Both versions are made up of three shaders:
     - **Engine version:** Godot 4.3 beta or later.
     - **Source:** A 3D scene. Could use workarounds for 2D, such as projecting a 2D SubViewport onto a 3D object.
     - **Timing:** Before or after a specific 3D rendering pass. The last time it can run is *before* built-in post-processing is complete -- after transparency, but before before tone-mapping, etc.
-    - **Code:** GDScript and compute shaders (GLSL). GDScript uses [RenderingDevice](https://docs.godotengine.org/en/latest/classes/class_renderingdevice.html) methods to connect to the Vulkan API. If you are not already familiar with low-level graphics programming, there can be a steep learning curve. See more information in the discussions: [Resources: CompositorEffects & Compute Shaders](https://github.com/pink-arcana/godot-distance-field-outlines/discussions/1).
+    - **Code:** GDScript and compute shaders (GLSL). GDScript uses [RenderingDevice](https://docs.godotengine.org/en/latest/classes/class_renderingdevice.html) methods to connect to the Vulkan API. If you are not already familiar with low-level graphics programming, there can be a steep learning curve. See more information in the discussions: [Getting started with CompositorEffects and Compute shaders](https://github.com/pink-arcana/godot-distance-field-outlines/discussions/1).
 
 
 
@@ -144,13 +145,13 @@ The actual content on the screen, like how many objects there are, or how many o
 
 ### Choosing between versions
 
-In this project, both versions have the same visual quality. ***DFOutlineCE*** is significantly more performant than ***DFOutlineNode***. But, depending on your project and the target hardware, performance may be good enough for both that it's not a deciding factor.
+In this project, both versions have similar visual quality, but DFOutlineCE has depth fade feature, and DFOutlineNode does not.
 
-***DFOutlineCE*** has great potential for extension, and ***DFOutlineNode*** does not. ***DFOutlineCE*** has all the data storage options that come with Compute shaders, and extra frame time to spare. With ***DFOutlineNode***, you can add extra *inputs* without much problem, but storing any extra data *between* passes will require expensive workarounds (see the [***DFOutlineNode*** README](project/df_outline_node/README.md) for details).
+***DFOutlineCE*** is significantly faster than ***DFOutlineNode***. But, depending on your project and the target hardware, performance may be good enough for both that it's not a deciding factor.
 
-***DFOutlineNode*** also has inherent technical debt and breaks easily. Managing its nodes in the scene tree requires careful attention to race conditions. And, because it's composed of CanvasItem nodes, changes to the Project's viewport settings will affect how it renders. ***DFOutlineCE***, with its direct connection to RenderingDevice, is simpler and feels much more solid.
+***DFOutlineCE*** has great potential for extension: it has all the data storage options that come with Compute shaders, and extra frame time to spare. With ***DFOutlineNode***, you can add extra inputs at the cost of rendering additional SubViewports, but it has limited storage between passes (see the [***DFOutlineNode*** README](project/df_outline_node/README.md) for details).
 
-For these reasons, I would only recommend using ***DFOutlineNode*** if you need the Compatibility renderer. Otherwise, I think the CompositorEffect is worth the steeper learning curve (for resources, see [Getting started with CompositorEffects and Compute shaders](https://github.com/pink-arcana/godot-distance-field-outlines/discussions/1)).
+***DFOutlineNode*** also has inherent technical debt and breaks more easily. Managing its nodes in the scene tree requires careful attention to race conditions. And, because it's composed of CanvasItem nodes, changes to the Project's viewport settings will affect how it renders. ***DFOutlineCE***, with its direct connection to RenderingDevice, is more reliable.
 
 
 ------------------------------------------------
@@ -160,11 +161,10 @@ For these reasons, I would only recommend using ***DFOutlineNode*** if you need 
 
 [<img src="media/screenshots/demo_neon_small.png">](media/screenshots/demo_neon.png)
 
-*Many of the settings are also available to test in the demo.*
+*This screenshot shows the outline settings available in the demo. There are additional settings you can edit in the ***DFOutlineSettings*** resource.*
 
 ### Outline width
-- Choose both an outline width and a viewport size. The width is normalized to the size of the viewport, so that outlines will look the same when the viewport size changes.
-- If you need an absolute width that will remain the same when the viewport resizes, use a script to change the viewport_size in the ***DFOutlineSettings*** resource whenever the game's viewport size changes. This will give you outlines that are the same pixel width, but look thinner when the viewport is larger, and thicker when the viewport is smaller.
+Choose both an outline width and a viewport size. The width is normalized to the size of the viewport, so that outlines will look the same when the viewport size changes.
 
 
 ### Outline effects
@@ -172,19 +172,14 @@ For these reasons, I would only recommend using ***DFOutlineNode*** if you need 
 
 This demo comes with some basic effects, including an animation, to demonstrate different ways you can render the distance field.
 
-The smoothing anti-aliasing effect included here is based on Valve's [recommendation to use smoothstep](https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf). Another distance field-specific anti-aliasing option exists using subpixel positions. It is not currently included because we are using integer coordinates. When I implemented it in an earlier branch, it was a subtle effect, but not as blurry as smoothstep (https://github.com/pink-arcana/godot-distance-field-outlines/issues/3). See [Antialiasing for SDF Textures](https://drewcassidy.me/2020/06/26/sdf-antialiasing/) for description of this method and other options.
+### Anti-aliasing
+[<img src="media/diagrams/anti_aliasing_small.png">](media/diagrams/anti_aliasing.png)
+
+The Smoothstep AA effect is based on the method described in [Valve's 2007 paper](https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf). The Subpixel AA effect uses the fractional difference between the outline width and the distance values. It is is based on [The Quest for Very Wide Outlines](https://bgolus.medium.com/the-quest-for-very-wide-outlines-ba82ed442cd9) by Ben Golus. See also: [Antialiasing for SDF Textures](https://drewcassidy.me/2020/06/26/sdf-antialiasing/).
 
 
-### Depth fade
-This project includes the ability to vary outline width and transparency by depth. This can be important for scenes with wide outlines, because the outlines can obscure small objects in the distance. However, the implementation is imperfect!
-
-The outline's seed pixel determines the depth of the adjacent outline. This works well when the seed pixel is located over the object we're outlining. But our method of outline extraction finds two seed pixels, one on each side of the true edge. This means that each half of the outline has a different depth. The other seed pixel may correspond to a far-away object, or even the sky.
-
-Any outline extraction method using Sobel kernels, or a similar method, will have this same limitation. But it is usually not a big problem for post-processing shaders that stop at the original 2 pixel outlines, since the artifact won't be obvious.
-
-However, when you widen the outlines like we are doing here, it becomes a problem. If you use the `Width` fade mode and adjust the settings for your scene, it can still look okay. But the artifact is obvious when you choose the `Alpha` mode.
-
-This should be fixable, but I haven't found the right method yet.
+### Depth fade (experimental)
+Fading outlines for far-away depths can be important for scenes with wide outlines, so they don't obscure objects in the distance. DFOutlineCE has the ability to fade both width and transparency. Depth fade is not compatible with DFOutlineNode or with [outline effects](https://github.com/pink-arcana/godot-distance-field-outlines/issues/8).
 
 
 ### Changing settings at runtime

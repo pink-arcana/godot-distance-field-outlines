@@ -3,12 +3,14 @@ class_name DFOutlineSettings
 extends Resource
 
 signal outline_width_changed
+signal depth_fade_mode_changed
 
 # NOTE: Must sync changes to EffectID with overlay shaders.
 enum EffectID {
 	NONE = 0,
 	BOX_BLUR = 1,
 	SMOOTHING = 2,
+	SUBPIXEL_AA = 3,
 	PADDING = 4,
 	INVERTED = 5,
 	SKETCH = 6,
@@ -29,7 +31,7 @@ enum DepthFadeMode {
 @export_category("Outline Settings")
 ## The outline width when displayed in a viewport of
 ## Outline Viewport Size. Automatically scales to other viewport sizes.
-@export var outline_width : int = 8 :
+@export var outline_width : float = 8 :
 	set(value):
 		if outline_width == value:
 			return
@@ -108,6 +110,7 @@ enum DepthFadeMode {
 		if depth_fade_mode == value:
 			return
 		depth_fade_mode = value
+		depth_fade_mode_changed.emit()
 		changed.emit()
 
 @export var depth_fade_start := 4.0 :

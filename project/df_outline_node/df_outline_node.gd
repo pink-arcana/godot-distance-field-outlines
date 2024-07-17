@@ -1,11 +1,9 @@
 @tool
 extends Node
 
-const EXTRACTION_SHADER_PATH := "res://df_outline_node/extraction.gdshader"
-const JF_PASS_SHADER_PATH := "res://df_outline_node/jf_pass.gdshader"
-const OVERLAY_SHADER_PATH := "res://df_outline_node/overlay.gdshader"
-
-const DEPTH_SHADER_PATH := "res://df_outline_node/sub_viewports/spatial_depth_next_pass.gdshader"
+const EXTRACTION_SHADER_PATH := "res://df_outline_node/shaders/extraction.gdshader"
+const JF_PASS_SHADER_PATH := "res://df_outline_node/shaders/jf_pass.gdshader"
+const OVERLAY_SHADER_PATH := "res://df_outline_node/shaders/overlay.gdshader"
 
 const DEBUG_PRINT_DISPLAY_SIZES := false
 
@@ -36,25 +34,6 @@ const SHADER_MATERIAL : String = "SHADER_MATERIAL"
 		if scene_camera:
 			_setup_viewports()
 
-
-@export_flags_3d_render var color_render_layers : int = 1 : # Layer 1
-	set(value):
-		color_render_layers = value
-		update_configuration_warnings()
-		_setup_viewports()
-
-
-@export_flags_3d_render var depth_render_layer : int = 524288  : # Layer 20
-	set(value):
-		depth_render_layer = value
-		update_configuration_warnings()
-		_setup_viewports()
-
-## Assigns a transparent material to the overlay slot of all MeshInstance3Ds
-## in the current scene that renders the depth
-## to depth_render_layer. Allows depth fade in Compatibility mode.
-@export var assign_depth_materials : bool = true
-
 @export var canvas_layer_start : int = 100
 
 @export var outline_settings : DFOutlineSettings :
@@ -70,33 +49,21 @@ const SHADER_MATERIAL : String = "SHADER_MATERIAL"
 		if jf_calc:
 			jf_calc.debug_print_values = print_jfa_updates
 
-@export var preview_color_input : bool = false
-@export var preview_depth_input : bool = false
-
 # Using load to avoid preload errors in the editor.
 var extraction_shader := load(EXTRACTION_SHADER_PATH)
 var jf_pass_shader := load(JF_PASS_SHADER_PATH)
 var overlay_shader := load(OVERLAY_SHADER_PATH)
-
-var depth_shader := load(DEPTH_SHADER_PATH)
 
 var _render_size : Vector2i
 var _control_size : Vector2i
 
 var jf_calc : JFCalculator
 
-## Used for calculating the min outline distance
-## when we are modulating outlines by depth.
-## Has no effect on JFA passes.
-var min_jf_calc : JFCalculator
-
 var _color_rects : Array[ColorRect]
 var _jf_pass_layers := {} # {offset (int) : layer (CanvasLayer)}
 var _jf_pass_materials := {} # {offset (int) : material}
 var _extraction_material : ShaderMaterial
 var _overlay_material : ShaderMaterial
-
-var _depth_material : ShaderMaterial
 
 var _layers_container : Node
 var _resize_timer: Timer
@@ -107,19 +74,12 @@ var _resize_queued := false
 var _width_change_queued := false
 
 @onready var color_sub_viewport: DFNodeSubViewport = %ColorSubViewport
-@onready var depth_sub_viewport: DFNodeSubViewport = %DepthSubViewport
 
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings : PackedStringArray = []
 	if not scene_camera:
 		warnings.append("Scene camera must be assigned.")
-	if color_render_layers & depth_render_layer:
-		warnings.append("Color layers cannot contain the depth layer.")
-	if color_render_layers == 0:
-		warnings.append("Color layers must have at least one layer assigned.")
-	if depth_render_layer == 0:
-		warnings.append("Depth layer must have at least one layer assigned.")
 	return warnings
 
 # ---------------------------------------------------------------------------
@@ -135,8 +95,6 @@ func _ready() -> void:
 	if not outline_settings:
 		outline_settings = DFOutlineSettings.new()
 	_setup_outline_settings()
-	if assign_depth_materials:
-		_assign_depth_materials()
 
 	_setup_viewports()
 
@@ -150,17 +108,6 @@ func _setup_outline_settings() -> void:
 	_update_shader_params()
 
 
-func _assign_depth_materials() -> void:
-	# We will set depth_max later, along with other shader uniforms,
-	# since it may change.
-	_depth_material = ShaderMaterial.new()
-	_depth_material.shader = depth_shader
-	_depth_material.set_shader_parameter("depth_layer", depth_render_layer)
-
-	for mesh_instance : MeshInstance3D in get_tree().root.find_children("*", "MeshInstance3D", true, false):
-		mesh_instance.material_overlay = _depth_material
-
-
 func _setup_viewports() -> void:
 	if not scene_camera:
 		printerr("[DFOutlineNode] No Scene Camera assigned.")
@@ -169,16 +116,7 @@ func _setup_viewports() -> void:
 	if not is_node_ready():
 		return
 
-	# Ensure that the color viewport doesn't render depth.
-	if color_render_layers & depth_render_layer:
-		push_error("[DFOutlineNode] Color layers cannot contain the depth layer.")
-		return
-
-	color_sub_viewport.setup(scene_camera, color_render_layers)
-
-	# The depth viewport's camera must see both color and depth.
-	var depth_camera_layers := depth_render_layer + color_render_layers
-	depth_sub_viewport.setup(scene_camera, depth_camera_layers)
+	color_sub_viewport.setup(scene_camera)
 
 	# We will connect to root's signal because
 	# it is the only viewport that will emit size_changed
@@ -238,7 +176,6 @@ func _clear_layers() -> void:
 	_extraction_material = null
 	_overlay_material = null
 	jf_calc = null
-	min_jf_calc = null
 
 	_next_layer_idx = -1
 
@@ -303,11 +240,6 @@ func _update_layers() -> void:
 	jf_calc.set_outline_width(outline_settings.outline_width, outline_settings.viewport_size)
 	jf_calc.set_render_size(_render_size)
 
-	min_jf_calc = JFCalculator.new(JFCalculator.EXPAND_SYMMETRICALLY)
-	min_jf_calc.debug_print_values = false
-	min_jf_calc.set_outline_width(outline_settings.min_outline_width, outline_settings.viewport_size)
-	min_jf_calc.set_render_size(_render_size)
-
 	_add_extraction_layer()
 	_add_jfa_layers()
 	_add_overlay_layer()
@@ -348,7 +280,6 @@ func _add_jfa_layers() -> void:
 			{
 				"offset": offset,
 				"last_pass": last_pass,
-				"depth_texture": depth_sub_viewport.get_texture() if depth_sub_viewport && last_pass else null,
 			},
 		)
 
@@ -417,7 +348,6 @@ func _update_outline_width() -> void:
 		_width_change_timer.start(WIDTH_CHANGE_DELAY)
 
 	jf_calc.set_outline_width(outline_settings.outline_width, outline_settings.viewport_size)
-	min_jf_calc.set_outline_width(outline_settings.min_outline_width, outline_settings.viewport_size)
 	_update_jf_pass_layer_visibility()
 	_update_shader_params()
 
@@ -445,14 +375,6 @@ func _update_jf_pass_layer_visibility() -> void:
 func _update_shader_params() -> void:
 	if not is_node_ready():
 		return
-
-	if depth_sub_viewport:
-		if outline_settings.depth_fade_mode == DFOutlineSettings.DepthFadeMode.NONE:
-			depth_sub_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
-		else:
-			depth_sub_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-		if _depth_material:
-			_depth_material.set_shader_parameter("depth_max", outline_settings.depth_fade_end)
 
 	if _extraction_material:
 		_set_shader_params(
@@ -483,11 +405,6 @@ func _update_shader_params() -> void:
 					"input_outline_color": outline_settings.outline_color,
 					"background_color": outline_settings.background_color,
 					"use_background_color": outline_settings.use_background_color,
-					"depth_fade_mode": outline_settings.depth_fade_mode,
-					"depth_fade_start": outline_settings.depth_fade_start,
-					"depth_fade_end": outline_settings.depth_fade_end,
-					"min_outline_alpha": outline_settings.min_outline_alpha,
-					"min_outline_distance": min_jf_calc.get_outline_distance(),
 					"effect_id": outline_settings.outline_effect,
 					"smoothing_distance": outline_settings.smoothing_distance,
 				},

@@ -1,9 +1,9 @@
-const vec2 NEIGHBORS[9] = {
+const vec2 KERNEL_OFFSETS[9] = {
 	vec2(-1.0,-1.0), vec2(0.0,-1.0), vec2(1.0,-1.0),
 	vec2(-1.0,0.0), vec2(0.0,0.0), vec2(1.0,0.0),
 	vec2(-1.0,1.0), vec2(0.0,1.0), vec2(1.0,1.0) };
 
-const vec2 NEIGHBORS_ONLY[8] = {
+const vec2 NEIGHBOR_OFFSETS[8] = {
 	vec2(-1.0,-1.0), vec2(0.0,-1.0), vec2(1.0,-1.0),
 	vec2(-1.0,0.0), vec2(1.0,0.0),
 	vec2(-1.0,1.0), vec2(0.0,1.0), vec2(1.0,1.0) };

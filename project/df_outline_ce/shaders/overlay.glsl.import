@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://ci8p4g0lsj6tj"
+path="res://.godot/imported/overlay.glsl-bf1eed1132be5a4063bdbb40eb0665d8.res"
+
+[deps]
+
+source_file="res://df_outline_ce/shaders/overlay.glsl"
+dest_files=["res://.godot/imported/overlay.glsl-bf1eed1132be5a4063bdbb40eb0665d8.res"]
+
+[params]
+

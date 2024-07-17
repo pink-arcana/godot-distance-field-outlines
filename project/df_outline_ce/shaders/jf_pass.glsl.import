@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://d4co52otcrhwh"
+path="res://.godot/imported/jf_pass.glsl-95c36d11ca75b4d506094b50a49933c0.res"
+
+[deps]
+
+source_file="res://df_outline_ce/shaders/jf_pass.glsl"
+dest_files=["res://.godot/imported/jf_pass.glsl-95c36d11ca75b4d506094b50a49933c0.res"]
+
+[params]
+
