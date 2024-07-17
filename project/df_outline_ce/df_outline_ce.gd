@@ -7,7 +7,7 @@ const JF_PASS_SHADER_PATH := "res://df_outline_ce/shaders/jf_pass.glsl"
 const OVERLAY_SHADER_PATH := "res://df_outline_ce/shaders/overlay.glsl"
 
 ## Also update #define DEBUG in glsl shaders.
-const USE_DEBUG_IMAGE = true
+const USE_DEBUG_IMAGE = false
 
 # Set 1 bindings
 const DF_DATA_UBO_BINDING := 0

@@ -1,7 +1,7 @@
 #[compute]
 #version 450
 
-#define DEBUG
+// #define DEBUG
 
 #include "includes/scene_data.glsl"
 #include "includes/scene_data_helpers.glsl"
