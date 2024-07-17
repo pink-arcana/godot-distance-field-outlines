@@ -178,7 +178,7 @@ This demo comes with some basic effects, including an animation, to demonstrate 
 The Smoothstep AA effect is based on the method described in [Valve's 2007 paper](https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf). The Subpixel AA effect uses the fractional difference between the outline width and the distance values. It is is based on [The Quest for Very Wide Outlines](https://bgolus.medium.com/the-quest-for-very-wide-outlines-ba82ed442cd9) by Ben Golus. See also: [Antialiasing for SDF Textures](https://drewcassidy.me/2020/06/26/sdf-antialiasing/).
 
 
-### Depth fade (experimental)
+### Depth fade
 Fading outlines for far-away depths can be important for scenes with wide outlines, so they don't obscure objects in the distance. DFOutlineCE has the ability to fade both width and transparency. Depth fade is not compatible with DFOutlineNode or with [outline effects](https://github.com/pink-arcana/godot-distance-field-outlines/issues/8).
 
 
