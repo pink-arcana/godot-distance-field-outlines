@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_im0pr"]
 script = ExtResource("3_iduxx")
-outline_width = 16
+outline_width = 16.0
 viewport_size = Vector2i(1920, 1080)
 reset_viewport_size = false
 sobel_threshold = 0.05
@@ -32,6 +32,7 @@ script = ExtResource("4_6a3v1")
 outline_settings = SubResource("Resource_im0pr")
 print_jfa_updates = false
 print_buffer_resize = false
+print_freed_rids = false
 
 [sub_resource type="Compositor" id="Compositor_l7jqr"]
 compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_fw67l")])

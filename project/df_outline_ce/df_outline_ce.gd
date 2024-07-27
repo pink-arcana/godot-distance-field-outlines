@@ -14,9 +14,10 @@ const DF_DATA_UBO_BINDING := 0
 const DEBUG_IMAGE_BINDING := 1
 
 # Set 2 bindings
-const JF_IMAGE_BINDING := 0
-const JF_SAMPLER_BINDING := 1
+const JF_IN_IMAGE_BINDING := 0
+const JF_OUT_IMAGE_BINDING := 1
 const DEPTH_IMAGE_BINDING := 2
+const DF_IMAGE_BINDING := 3
 
 # Specialization constant bindings
 const JF_CONSTANT_OFFSET : int = 0
@@ -33,7 +34,7 @@ const EXTRACTION_CONSTANT_DEPTH_FADE : int = 1
 		outline_settings = value
 		setup_outline_settings()
 
-@export_subgroup("Debug")
+@export_subgroup("DF Debug")
 @export var print_jfa_updates : bool = false :
 	set(value):
 		print_jfa_updates = value
@@ -42,16 +43,22 @@ const EXTRACTION_CONSTANT_DEPTH_FADE : int = 1
 
 
 var context : StringName = "DFOutlineCE"
-var texture : StringName = "texture"
-var texture_image_uniform : RDUniform
-var texture_sampler_uniform : RDUniform
-var pong_texture : StringName = "pong_texture"
-var pong_image_uniform : RDUniform
-var pong_sampler_uniform : RDUniform
-var depth_texture : StringName = "depth_texture"
+
+var texture_a : StringName = "TextureA"
+var texture_a_in_image_uniform : RDUniform
+var texture_a_out_image_uniform : RDUniform
+
+var texture_b : StringName = "TextureB"
+var texture_b_in_image_uniform : RDUniform
+var texture_b_out_image_uniform : RDUniform
+
+var depth_texture : StringName = "DepthTexture"
 var depth_image_uniform : RDUniform
 
-var debug_texture : StringName = "debug_texture"
+var df_texture : StringName = "DFTexture"
+var df_image_uniform : RDUniform
+
+var debug_texture : StringName = "DebugTexture"
 var debug_image_uniform : RDUniform
 
 var df_data_ubo : RID
@@ -93,17 +100,9 @@ func _initialize_resource() -> void:
 func _initialize_render() -> void:
 	# Pipelines will have specialization constants attached,
 	# so we will create them later.
-	var shader_file := load(EXTRACTION_SHADER_PATH)
-	var shader_spirv : RDShaderSPIRV = shader_file.get_spirv()
-	extraction_shader = rd.shader_create_from_spirv(shader_spirv)
-
-	shader_file = load(JF_PASS_SHADER_PATH)
-	shader_spirv = shader_file.get_spirv()
-	jf_pass_shader = rd.shader_create_from_spirv(shader_spirv)
-
-	shader_file = load(OVERLAY_SHADER_PATH)
-	shader_spirv = shader_file.get_spirv()
-	overlay_shader = rd.shader_create_from_spirv(shader_spirv)
+	extraction_shader = create_shader(EXTRACTION_SHADER_PATH)
+	jf_pass_shader = create_shader(JF_PASS_SHADER_PATH)
+	overlay_shader = create_shader(OVERLAY_SHADER_PATH)
 
 
 # Called at beginning of _render_callback(), after updating/validating rd references.
@@ -120,7 +119,7 @@ func _render_setup() -> void:
 	if not rd.compute_pipeline_is_valid(extraction_pipeline):
 		create_extraction_pipeline()
 
-	if not render_scene_buffers.has_texture(context, texture):
+	if not render_scene_buffers.has_texture(context, texture_a):
 		create_textures()
 
 
@@ -135,23 +134,22 @@ func _render_view(p_view : int) -> void:
 	var uniform_sets : Array[Array]
 
 	# EXTRACTION PASS
-	rd.draw_command_begin_label("DF: Extraction", Color.BLUE)
 	uniform_sets = [
 		scene_uniform_set,
 		df_uniform_set,
-		[texture_image_uniform, depth_image_uniform],
+		[texture_a_out_image_uniform, depth_image_uniform],
 	]
 
 	run_compute_shader(
+		"DF: Extraction",
 		extraction_shader,
 		extraction_pipeline,
 		uniform_sets,
 	)
-	rd.draw_command_end_label()
 
 	# JUMP FLOODING PASSES
-	var in_sampler_uniform : RDUniform = texture_sampler_uniform
-	var out_image_uniform : RDUniform = pong_image_uniform
+	var in_image_uniform : RDUniform = texture_a_in_image_uniform
+	var out_image_uniform : RDUniform = texture_b_out_image_uniform
 
 	var step_offsets : PackedInt32Array = jf_calc.get_step_offsets()
 
@@ -162,46 +160,41 @@ func _render_view(p_view : int) -> void:
 			printerr("No valid JF pass pipeline found for offset: %s" % offset)
 			continue
 
-		rd.draw_command_begin_label("DF: Jump Flooding - %spx" % offset, Color.GREEN)
-
 		uniform_sets = [
 			scene_uniform_set,
 			df_uniform_set,
-			[in_sampler_uniform, out_image_uniform, depth_image_uniform],
+			[in_image_uniform, out_image_uniform, depth_image_uniform, df_image_uniform],
 		]
 
 		run_compute_shader(
+			"DF: Jump Flooding - %spx" % offset,
 			jf_pass_shader,
 			pipeline,
 			uniform_sets,
 		)
 
 		# Swap the textures at end of each pass.
-		if out_image_uniform == texture_image_uniform:
-			in_sampler_uniform = texture_sampler_uniform
-			out_image_uniform = pong_image_uniform
+		if out_image_uniform == texture_a_out_image_uniform:
+			in_image_uniform = texture_a_in_image_uniform
+			out_image_uniform = texture_b_out_image_uniform
 		else:
-			in_sampler_uniform = pong_sampler_uniform
-			out_image_uniform = texture_image_uniform
-
-	rd.draw_command_end_label()
+			in_image_uniform = texture_b_in_image_uniform
+			out_image_uniform = texture_a_out_image_uniform
 
 
 	# OVERLAY PASS
-	rd.draw_command_begin_label("DF: Overlay", Color.YELLOW)
 	uniform_sets = [
 		scene_uniform_set,
 		df_uniform_set,
-		[in_sampler_uniform],
+		[df_image_uniform],
 	]
 
 	run_compute_shader(
+		"DF: Overlay",
 		overlay_shader,
 		overlay_pipeline,
 		uniform_sets,
 	)
-
-	rd.draw_command_end_label()
 
 
 # ---------------------------------------------------------------------------
@@ -324,37 +317,37 @@ func create_global_uniform_buffer() -> void:
 
 
 func create_textures() -> void:
-	const JF_TEXTURE_FORMAT := RenderingDevice.DATA_FORMAT_R16G16_UNORM
+	const JF_TEXTURE_FORMAT := RenderingDevice.DATA_FORMAT_R16G16_UINT
 
-	var texture_image : RID = create_simple_texture(
+	var texture_a_image : RID = create_simple_texture(
 			context,
-			texture,
+			texture_a,
 			JF_TEXTURE_FORMAT,
 	)
-	texture_image_uniform = get_image_uniform(
-			texture_image,
-			JF_IMAGE_BINDING,
+	texture_a_in_image_uniform = get_image_uniform(
+			texture_a_image,
+			JF_IN_IMAGE_BINDING,
 	)
-	texture_sampler_uniform = get_sampler_uniform(
-			texture_image,
-			nearest_sampler,
-			JF_SAMPLER_BINDING,
+	texture_a_out_image_uniform = get_image_uniform(
+			texture_a_image,
+			JF_OUT_IMAGE_BINDING,
 	)
 
-	var pong_texture_image : RID = create_simple_texture(
+
+	var texture_b_image : RID = create_simple_texture(
 			context,
-			pong_texture,
+			texture_b,
 			JF_TEXTURE_FORMAT,
 	)
-	pong_image_uniform = get_image_uniform(
-			pong_texture_image,
-			JF_IMAGE_BINDING,
+	texture_b_in_image_uniform = get_image_uniform(
+			texture_b_image,
+			JF_IN_IMAGE_BINDING,
 	)
-	pong_sampler_uniform = get_sampler_uniform(
-			pong_texture_image,
-			nearest_sampler,
-			JF_SAMPLER_BINDING,
+	texture_b_out_image_uniform = get_image_uniform(
+			texture_b_image,
+			JF_OUT_IMAGE_BINDING,
 	)
+
 
 	var depth_image : RID = create_simple_texture(
 		context,
@@ -362,6 +355,16 @@ func create_textures() -> void:
 		RenderingDevice.DATA_FORMAT_R16_UNORM,
 	)
 	depth_image_uniform = get_image_uniform(depth_image, DEPTH_IMAGE_BINDING)
+
+
+	var df_image : RID = create_simple_texture(
+		context,
+		df_texture,
+		RenderingDevice.DATA_FORMAT_R16G16_UNORM,
+	)
+	df_image_uniform = get_image_uniform(df_image, DF_IMAGE_BINDING)
+
+
 
 	# DEBUG TEXTURE
 	if USE_DEBUG_IMAGE:

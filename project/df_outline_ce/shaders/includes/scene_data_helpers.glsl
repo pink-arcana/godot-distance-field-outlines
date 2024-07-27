@@ -29,8 +29,7 @@ highp vec4 unpack_normal_roughness(vec4 p_normal_roughness) {
 
 
 highp vec4 get_normal_roughness_color(ivec2 p_coord) {
-	highp vec2 uv = coord_to_uv(p_coord);
-	return unpack_normal_roughness(textureLod(normal_roughness_sampler, uv, 0.0));
+	return unpack_normal_roughness(texelFetch(normal_roughness_sampler, p_coord, 0));
 }
 
 
@@ -48,8 +47,7 @@ highp float raw_to_linear_depth(ivec2 p_coord, highp float p_raw_depth) {
 
 
 highp float get_linear_depth(ivec2 p_coord) {
-	highp float log_depth = get_raw_depth(p_coord);
-    return raw_to_linear_depth(p_coord, log_depth);
+    return raw_to_linear_depth(p_coord, get_raw_depth(p_coord));
 }
 
 

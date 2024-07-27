@@ -15,7 +15,7 @@ layout(rgba16f, set = 1, binding = 1) uniform restrict writeonly image2D debug_i
 #endif // DEBUG
 
 layout(rg16f, set = 0, binding = 1) uniform restrict image2D color_image;
-layout(set = 2, binding = 1) uniform sampler2D df_sampler;
+layout(rg16f, set = 2, binding = 3) uniform restrict readonly image2D df_image;
 
 // ---------------------------------------------------------------------------
 // 2D Noise function adapted from Morgan McGuire @morgan3d (BSD license)
@@ -81,7 +81,7 @@ void main() {
 	ivec2 image_coord = ivec2(gl_GlobalInvocationID.xy);
     vec2 uv = (image_coord + 0.5) / viewport_size;
 
-    vec2 df_color = texelFetch(df_sampler, image_coord, 0).rg;
+    vec2 df_color = imageLoad(df_image, image_coord).rg;
     float dist_n = df_color.r;
     float dist = dist_n * distance_denominator;
 
@@ -116,7 +116,7 @@ void main() {
 
         for (int i = 0; i < KERNEL_OFFSETS.length(); i++) {
             ivec2 neighbor_coord = image_coord + KERNEL_OFFSETS[i];
-            float neighbor_dist = texelFetch(df_sampler, neighbor_coord, 0).r * distance_denominator;
+            float neighbor_dist = imageLoad(df_image, neighbor_coord).r * distance_denominator;
             float neighbor_outline_mix = neighbor_dist <= outline_distance ? 1.0 : 0.0;
             neighbor_sum += neighbor_outline_mix;
         }

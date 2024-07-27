@@ -15,7 +15,7 @@ layout(rgba16f, set = 1, binding = 1) uniform restrict writeonly image2D debug_i
 #endif // DEBUG
 
 layout(rg16f, set = 0, binding = 1) uniform restrict readonly image2D color_image;
-layout(rg16f, set = 2, binding = 0) uniform restrict writeonly image2D out_image;
+layout(rg16ui, set = 2, binding = 1) uniform restrict writeonly uimage2D out_image;
 layout(r16f, set = 2, binding = 2) uniform restrict writeonly image2D depth_image;
 
 const float X_KERNEL[9] = {
@@ -124,8 +124,5 @@ void main() {
 		imageStore(depth_image, image_coord, vec4(seed_depth));
 	}
 
-	// We use vec2(1.0,1.0) to indicate an invalid coordinate (i.e. not a seed), and pack
-	// our valid coordinates into a range of [0.0,0.99].
-	highp vec2 seed_packed = is_seed ? pack_coord(image_coord, ivec2(scene.data.viewport_size)) : INVALID_SEED;
-	imageStore(out_image, image_coord, vec4(seed_packed, 0.0, 0.0));
+	imageStore(out_image, image_coord, ivec4(is_seed ? image_coord : INVALID_COORD, 0, 0));
 }

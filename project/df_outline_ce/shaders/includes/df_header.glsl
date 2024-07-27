@@ -25,8 +25,7 @@ layout(set = 1, binding = 0, std140) uniform DFDataBlock {
 // ---------------------------------------------------------------------------
 
 const float EPSILON = 0.001;
-const highp vec2 INVALID_SEED = vec2(1.0, 1.0);
-const float UV_PACK_SCALE = 0.99;
+const ivec2 INVALID_COORD = ivec2(32000, 32000);
 
 // Effect IDs
 // Values should match OutlineEffect enum in OutlineSettings class.
@@ -71,20 +70,6 @@ float dist_squared(ivec2 p_coord_a, ivec2 p_coord_b) {
 	vec2 coord_a = vec2(p_coord_a);
 	vec2 coord_b = vec2(p_coord_b);
 	return (coord_a.x - coord_b.x) * (coord_a.x - coord_b.x) + (coord_a.y - coord_b.y) * (coord_a.y - coord_b.y);
-}
-
-
-// Normalize and pack a texture-space coord for storage in a range of [0,UV_PACK_SCALE].
-// We need to add 0.5 when normalizing coords derived from gl_GlobalInvocationID.
-highp vec2 pack_coord(highp vec2 p_coord, ivec2 p_render_size) {
-	return (p_coord + 0.5) * (UV_PACK_SCALE / p_render_size);
-}
-
-
-// We will round to ivec2 for accuracy. Unpacking coords to highp vec2
-// prevented the seed coords from keeping distances of 0.0.
-ivec2 unpack_coord(highp vec2 p_uv, ivec2 p_viewport_size) {
-	return ivec2(round(p_uv * (p_viewport_size / UV_PACK_SCALE) - 0.5));
 }
 
 

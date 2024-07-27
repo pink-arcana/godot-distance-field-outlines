@@ -49,7 +49,7 @@ Web:
 
 Desktop:
 - Clone this repository, or, from [the main Github page](https://github.com/pink-arcana/godot-distance-field-outlines), click on `<Code>` and select `Download ZIP`.
-- Open the project in [Godot 4.3 beta](https://godotengine.org/download/preview/) or later.
+- Open the project in [Godot 4.3 RC1](https://godotengine.org/download/preview/) or later.
     - The first time you open the project, you may see multiple errors. This is because the cache hasn't been created. Save the project, then open the `Project` menu and select `Reload Current Project`. This time, it should open without errors.
 - Click on `Run Project`.
 

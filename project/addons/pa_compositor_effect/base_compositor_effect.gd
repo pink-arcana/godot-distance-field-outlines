@@ -2,8 +2,8 @@
 class_name BaseCompositorEffect
 extends CompositorEffect
 
+@export_subgroup("Debug")
 @export var print_buffer_resize : bool = false
-
 ## Use to troubleshoot errors from freeing invalid RIDs.
 @export var print_freed_rids : bool = false
 
@@ -97,9 +97,9 @@ func add_rid_to_free(p_rid : RID, p_label : String = "") -> void:
 	_rids_to_free[p_rid] = p_label
 
 
-# rid.is_valid() returns true for previously freed rids.
-# So we will track rids as they are freed to prevent errors
-# when attempting to free them.
+## rid.is_valid() returns true for previously freed rids.
+## This function is used to track rids as they are freed to prevent errors
+## when attempting to free them.
 func free_rid(p_rid : RID) -> void:
 	_rids_to_free.erase(p_rid)
 	if p_rid.is_valid():
@@ -131,7 +131,7 @@ func create_shader(p_file_path : String) -> RID:
 	return shader
 
 
-# p_constants is a dictionary of {key int : value bool/int/float}.
+## p_constants is a dictionary of {int : bool/int/float}.
 func create_pipeline(p_shader : RID, p_constants := {}) -> RID:
 	if not p_shader.is_valid():
 		push_error("Shader is not valid")
@@ -157,7 +157,7 @@ func create_simple_texture(
 		p_format : RenderingDevice.DataFormat,
 		p_usage_bits : int = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT \
 			| RenderingDevice.TEXTURE_USAGE_STORAGE_BIT,
-		p_render_size := Vector2i.ZERO,
+		p_texture_size := Vector2i.ZERO,
 	) -> RID:
 
 	const TEXTURE_SAMPLES := RenderingDevice.TextureSamples.TEXTURE_SAMPLES_1
@@ -167,7 +167,7 @@ func create_simple_texture(
 	const TEXTURE_MIPMAP : int = 0
 	const TEXTURE_IS_UNIQUE : bool = true
 
-	var render_size := render_size if p_render_size == Vector2i.ZERO else p_render_size
+	var texture_size := render_size if p_texture_size == Vector2i.ZERO else p_texture_size
 
 	render_scene_buffers.create_texture(
 			p_context,
@@ -175,7 +175,7 @@ func create_simple_texture(
 			p_format,
 			p_usage_bits,
 			TEXTURE_SAMPLES,
-			render_size,
+			texture_size,
 			TEXTURE_LAYER_COUNT,
 			TEXTURE_MIPMAP_COUNT,
 			TEXTURE_IS_UNIQUE,
@@ -198,16 +198,15 @@ func create_simple_texture(
 
 
 
-# Individual assignments in a uniform buffer must be aligned to 16 bytes.
-# However, you can assign the whole buffer to a struct, and that struct can contain
-# elements aligned at 4 bytes (== one 32-bit float, which is the smallest data size
-# for uniforms).
-#
-# Vector4's must be aligned to 16 bytes, so it is best to put them first in the list.
-#
-# Automatic conversion for Vector2's and Vector3's is not included here
-# because (1) we don't need them, and, (2) if we did, we should probably convert
-# them to Vector4 manually so we can keep track of their alignment.
+## Individual assignments in a uniform buffer must be aligned to 16 bytes.
+## However, you can assign the whole buffer to a struct, and that struct can contain
+## elements aligned at 4 bytes (== one 32-bit float, which is the smallest data size
+## for uniforms).
+##
+## Vector4's must be aligned to 16 bytes, so it is best to put them first in the list.
+##
+## Automatic conversion for Vector2's and Vector3's is not included here.
+## We should convert them to Vector4 manually so we can keep track of their alignment.
 func create_uniform_buffer(p_data : Array) -> RID:
 	var buffer_data : PackedByteArray
 
@@ -280,16 +279,19 @@ func get_sampler_uniform(
 	return uniform
 
 
-# The parameter `p_push_constant` takes a PackedFloat32Array and resizes
-# it to meet layout requirements. Push constants use std430, so the items
-# don't require padding for alignment. But it appears the total size must be
-# a multiple of 16 bytes.
+## `p_push_constant` takes a PackedFloat32Array and resizes
+## it to meet layout requirements. Push constants use std430, so the items
+## don't require padding for alignment. But it appears the total size must be
+## a multiple of 16 bytes.
 func run_compute_shader(
+			p_label : String,
 			p_shader : RID,
 			p_pipeline : RID,
 			p_uniform_sets : Array[Array],
 			p_push_constant := PackedFloat32Array(),
 		) -> void:
+
+	rd.draw_command_begin_label(p_label, Color.AQUAMARINE)
 
 	var compute_list := rd.compute_list_begin()
 	rd.compute_list_bind_compute_pipeline(compute_list, p_pipeline)
@@ -325,9 +327,10 @@ func run_compute_shader(
 
 	rd.compute_list_dispatch(compute_list, _workgroups.x, _workgroups.y, _workgroups.z)
 	rd.compute_list_end()
+	rd.draw_command_end_label()
 
-
-# See https://github.com/godotengine/godot/pull/80214#issuecomment-1953258434
+## Get Godot's built-in SceneData UBO.
+## See https://github.com/godotengine/godot/pull/80214#issuecomment-1953258434
 func get_scene_data_ubo() -> RDUniform:
 	if not render_scene_data:
 		return null
@@ -390,26 +393,31 @@ func _get_workgroup_size() -> int:
 	return 16
 
 
-# Called from _init().
+## Virtual function. Called from _init(). Use this function to set up components
+## of this resource that are unrelated to the rendering thread.
 func _initialize_resource() -> void:
 	pass
 
 
-# Called on render thread after _init().
+## Virtual function. Called on render thread after _init(). Use this function
+## to set up components associated with the rendering thread, such as samplers,
+## shaders and pipelines.
 func _initialize_render() -> void:
 	pass
 
 
-# Called at beginning of _render_callback(), after updating render variables.
-# Use this function to setup textures or uniforms that do not depend on the view.
+## Called at beginning of _render_callback(), after updating render variables
+## and after _render_size_changed().
+## Use this function to validate and setup textures or uniforms.
 func _render_setup() -> void:
 	pass
 
 
-# Called for each view. Run the compute shaders from here.
+## Called for each view. Run the compute shaders from here.
 func _render_view(p_view : int) -> void:
 	pass
 
 
+## Called before _render_setup() if `render_size` has changed.
 func _render_size_changed() -> void:
 	pass

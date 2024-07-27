@@ -4,6 +4,9 @@ See the main Distance Field Outlines [README](https://github.com/pink-arcana/god
 
 ### Adding DFOutlineCE to your project
 - Move the contents of the `df_outline_ce` and `shared_dependencies` folders to your project.
+    - The `df_outline_ce` folder.
+    - The `shared_dependencies` folder.
+    - `base_compositor_effect.gd` (found in `addons/pa_compositor_effect`).
 - Update the paths to the shaders at the top of `df_outline_ce.gd`.
 
 ### Adding DFOutlineCE to your scene
