@@ -29,54 +29,153 @@ const float Y_KERNEL[9] = {
 	1.0, 2.0, 1.0};
 
 
-// Here, we are using coordinates in texture space,
-// so the offset between adjacent coordinates is equal to the values in KERNEL_OFFSETS.
-// We do not need to adjust for texel size.
-vec4[9] get_image_colors(ivec2 p_image_coord) {
-	vec4 colors[9];
-	for (int i = 0; i < KERNEL_OFFSETS.length(); i++) {
-		ivec2 offset = KERNEL_OFFSETS[i];
-		ivec2 coord = p_image_coord + offset;
+// Adapted from High Quality Post Process Outline by EMBYR (Hannah "EMBYR" Crawford)
+// MIT license
+// https://godotshaders.com/shader/high-quality-post-process-outline/
 
-		// If the neighbor coordinate is outside of our texture,
-		// we will sample the nearest edge texel's color instead.
-		// (Repeat modes aren't relevant for imageLoad or texel fetches.)
-		coord = ivec2(
-			clamp(coord.x, 0, int(scene.data.viewport_size.x) - 1),
-			clamp(coord.y, 0, int(scene.data.viewport_size.y) - 1));
+// UNIFORMS
+const vec4 outlineColor = vec4(0.0, 0.0, 0.0, 0.78);
+const float depth_threshold = 0.025;
+const float normal_threshold = 0.5;
+const float normal_smoothing = 0.25;
 
-		colors[i] = imageLoad(color_image, coord);
-	}
-	return colors;
+const float max_distance = 75.0;
+const float min_distance = 2.0;
+
+const float grazing_fresnel_power = 5.0;
+const float grazing_angle_mask_power = 1.0;
+const float grazing_angle_modulation_factor = 50.0;
+
+// STRUCTS
+// Changed from vec2 to ivec2 for imageLoad sampling.
+struct UVNeighbors {
+	ivec2 center;
+	ivec2 left;     ivec2 right;     ivec2 up;          ivec2 down;
+	ivec2 top_left; ivec2 top_right; ivec2 bottom_left; ivec2 bottom_right;
+};
+
+struct NeighborDepthSamples {
+	float c_d;
+	float l_d;  float r_d;  float u_d;  float d_d;
+	float tl_d; float tr_d; float bl_d; float br_d;
+};
+
+// Removed width and aspect since current setup only samples integer coordinates,
+// and outlines are widened later in JFA passes.
+UVNeighbors getNeighbors(ivec2 center) {
+	ivec2 h_offset = ivec2(1, 0);
+	ivec2 v_offset = ivec2(0, 1);
+	UVNeighbors n;
+	n.center = center;
+	n.left   = center - h_offset;
+	n.right  = center + h_offset;
+	n.up     = center - v_offset;
+	n.down   = center + v_offset;
+	n.top_left     = center - (h_offset - v_offset);
+	n.top_right    = center + (h_offset - v_offset);
+	n.bottom_left  = center - (h_offset + v_offset);
+	n.bottom_right = center + (h_offset + v_offset);
+	return n;
 }
 
 
-vec4 get_axis_gradient(vec4[9] p_colors, float[9] p_kernel) {
-	vec4 gradient = vec4(0.0);
-	for (int i = 0; i < p_colors.length(); i++) {
-		gradient += p_colors[i] * p_kernel[i];
-	}
-	return gradient;
+float getMinimumDepth(NeighborDepthSamples ds){
+	return min(ds.c_d, min(ds.l_d, min(ds.r_d, min(ds.u_d, min(ds.d_d, min(ds.tl_d, min(ds.tr_d, min(ds.bl_d, ds.br_d))))))));
+}
+
+
+float getLinearDepth(float depth, vec2 uv, mat4 inv_proj) {
+	vec3 ndc = vec3(uv * 2.0 - 1.0, depth);
+	vec4 view = inv_proj * vec4(ndc, 1.0);
+	view.xyz /= view.w;
+	return -view.z;
+}
+
+// Modified to use get_linear_depth() from scene_data_helpers.glsl
+NeighborDepthSamples getLinearDepthSamples(UVNeighbors uvs) {
+	NeighborDepthSamples result;
+	result.c_d  = get_linear_depth(uvs.center);
+	result.l_d  = get_linear_depth(uvs.left);
+	result.r_d  = get_linear_depth(uvs.right);
+	result.u_d  = get_linear_depth(uvs.up);
+	result.d_d  = get_linear_depth(uvs.down);
+	result.tl_d = get_linear_depth(uvs.top_left);
+	result.tr_d = get_linear_depth(uvs.top_right);
+	result.bl_d = get_linear_depth(uvs.bottom_left);
+	result.br_d = get_linear_depth(uvs.bottom_right);
+	return result;
+}
+
+
+float fresnel(float amount, vec3 normal, vec3 view) {
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0 )), amount);
+}
+
+
+float getGrazingAngleModulation(vec3 pixel_normal, vec3 view) {
+	float x = clamp(((fresnel(grazing_fresnel_power, pixel_normal, view) - 1.0) / grazing_angle_mask_power) + 1.0, 0.0, 1.0);
+	return (x + grazing_angle_modulation_factor) + 1.0;
+}
+
+float detectEdgesDepth(NeighborDepthSamples depth_samples, vec3 pixel_normal, vec3 view) {
+	float n_total =
+		depth_samples.l_d +
+		depth_samples.r_d +
+		depth_samples.u_d +
+		depth_samples.d_d +
+		depth_samples.tl_d +
+		depth_samples.tr_d +
+		depth_samples.bl_d +
+		depth_samples.br_d;
+
+	float t = depth_threshold * getGrazingAngleModulation(pixel_normal, view);
+	return step(t, n_total - (depth_samples.c_d * 8.0));
+}
+
+
+float detectEdgesNormal(UVNeighbors uvs) {
+	vec3 n_u = get_normal_roughness_color(uvs.up).xyz;
+	vec3 n_d = get_normal_roughness_color(uvs.down).xyz;
+	vec3 n_l = get_normal_roughness_color(uvs.left).xyz;
+	vec3 n_r = get_normal_roughness_color(uvs.right).xyz;
+	vec3 n_tl = get_normal_roughness_color(uvs.top_left).xyz;
+	vec3 n_tr = get_normal_roughness_color(uvs.top_right).xyz;
+	vec3 n_bl = get_normal_roughness_color(uvs.bottom_left).xyz;
+	vec3 n_br = get_normal_roughness_color(uvs.bottom_right).xyz;
+
+	vec3 normalFiniteDifference0 = n_tr - n_bl;
+	vec3 normalFiniteDifference1 = n_tl - n_br;
+	vec3 normalFiniteDifference2 = n_l - n_r;
+	vec3 normalFiniteDifference3 = n_u - n_d;
+
+	float edgeNormal = sqrt(
+		dot(normalFiniteDifference0, normalFiniteDifference0) +
+		dot(normalFiniteDifference1, normalFiniteDifference1) +
+		dot(normalFiniteDifference2, normalFiniteDifference2) +
+		dot(normalFiniteDifference3, normalFiniteDifference3)
+	);
+
+	return smoothstep(normal_threshold - normal_smoothing, normal_threshold + normal_smoothing, edgeNormal);
 }
 
 
 // Because the seed position may be on either side of the edge,
 // we will get the minimum depth from neighboring texels.
-highp float get_seed_depth(ivec2 p_seed_coord) {
-	highp float min_depth = get_linear_depth(p_seed_coord);
+// highp float get_seed_depth(ivec2 p_seed_coord) {
+// 	highp float min_depth = get_linear_depth(p_seed_coord);
 
-	// Skipping corners or using only corners is not measurably faster,
-	// and results are visibly worse.
-	for (int i = 0; i < NEIGHBOR_OFFSETS.length(); i++) {
-		ivec2 neighbor_coord = p_seed_coord + NEIGHBOR_OFFSETS[i];
-		// Convert depth to linar for correct comparison.
-		highp float depth = get_linear_depth(neighbor_coord);
-		min_depth = depth < min_depth ? depth : min_depth;
-	}
+// 	// Skipping corners or using only corners is not measurably faster,
+// 	// and results are visibly worse.
+// 	for (int i = 0; i < NEIGHBOR_OFFSETS.length(); i++) {
+// 		ivec2 neighbor_coord = p_seed_coord + NEIGHBOR_OFFSETS[i];
+// 		// Convert depth to linar for correct comparison.
+// 		highp float depth = get_linear_depth(neighbor_coord);
+// 		min_depth = depth < min_depth ? depth : min_depth;
+// 	}
 
-	// Convert to normalized depth value.
-	return get_depth_value(min_depth);
-}
+// 	// Convert to normalized depth value.
+// 	return get_depth_value(min_depth);
+// }
 
 
 void main() {
@@ -108,20 +207,27 @@ void main() {
 	// and base_compositor_effect.gd.)
 	// ---------------------------------------------------------------------------
 
-	vec4 image_colors[9] = get_image_colors(image_coord);
-	vec4 gx = get_axis_gradient(image_colors, X_KERNEL);
-	vec4 gy = get_axis_gradient(image_colors, Y_KERNEL);
-	vec4 sobel_magnitude = sqrt(gx * gx + gy * gy);
-	float max_sobel = max(sobel_magnitude.r, max(sobel_magnitude.g, sobel_magnitude.b));
+	UVNeighbors n = getNeighbors(image_coord);
+	NeighborDepthSamples depth_samples = getLinearDepthSamples(n);
+	vec3 pixel_normal = get_normal_roughness_color(image_coord).xyz;
 
-	bool is_seed = max_sobel > df.data.sobel_threshold;
+	// Is this the equivalent of Spatial shader's VIEW?
+	vec3 view = -scene.data.view_matrix[2].xyz;
+
+	float depthEdges = detectEdgesDepth(depth_samples, pixel_normal, view);
+	float normEdges = min(detectEdgesNormal(n), 1.0);
+	float max_edges = max(depthEdges, normEdges);
+
+	// Arbitrary threshold to consider a texel part of the outline.
+	const float EDGE_THRESHOLD = 0.1;
+	bool is_seed = max_edges > EDGE_THRESHOLD;
 	// ---------------------------------------------------------------------------
 	// ---------------------------------------------------------------------------
 
-	highp float seed_depth = 1.0;
 	if (DEPTH_FADE_MODE != DEPTH_FADE_MODE_NONE) {
-		seed_depth = get_seed_depth(image_coord);
-		imageStore(depth_image, image_coord, vec4(seed_depth));
+		float min_d = getMinimumDepth(depth_samples);
+		float depth_value = get_depth_value(min_d);
+		imageStore(depth_image, image_coord, vec4(depth_value));
 	}
 
 	imageStore(out_image, image_coord, ivec4(is_seed ? image_coord : INVALID_COORD, 0, 0));
