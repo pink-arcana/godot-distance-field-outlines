@@ -64,7 +64,10 @@ vec4[9] get_normal_roughness_colors(ivec2 p_image_coord) {
 			clamp(coord.x, 0, int(scene.data.viewport_size.x) - 1),
 			clamp(coord.y, 0, int(scene.data.viewport_size.y) - 1));
 
-		colors[i] = get_normal_roughness_color(coord);
+		vec4 normal_roughness_color = get_normal_roughness_color(coord);
+		vec3 screen_normal = normal_roughness_color.xyz * 2.0 - 1.0;
+
+		colors[i] = vec4(screen_normal, 0.0);
 	}
 	return colors;
 }
