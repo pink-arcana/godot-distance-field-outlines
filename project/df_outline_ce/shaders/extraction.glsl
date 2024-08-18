@@ -1,7 +1,7 @@
 #[compute]
 #version 450
 
-// define DEBUG
+#define DEBUG
 
 #include "includes/scene_data.glsl"
 #include "includes/scene_data_helpers.glsl"
@@ -46,6 +46,25 @@ vec4[9] get_image_colors(ivec2 p_image_coord) {
 			clamp(coord.y, 0, int(scene.data.viewport_size.y) - 1));
 
 		colors[i] = imageLoad(color_image, coord);
+	}
+	return colors;
+}
+
+
+vec4[9] get_normal_roughness_colors(ivec2 p_image_coord) {
+	vec4 colors[9];
+	for (int i = 0; i < KERNEL_OFFSETS.length(); i++) {
+		ivec2 offset = KERNEL_OFFSETS[i];
+		ivec2 coord = p_image_coord + offset;
+
+		// If the neighbor coordinate is outside of our texture,
+		// we will sample the nearest edge texel's color instead.
+		// (Repeat modes aren't relevant for imageLoad or texel fetches.)
+		coord = ivec2(
+			clamp(coord.x, 0, int(scene.data.viewport_size.x) - 1),
+			clamp(coord.y, 0, int(scene.data.viewport_size.y) - 1));
+
+		colors[i] = get_normal_roughness_color(coord);
 	}
 	return colors;
 }
@@ -108,13 +127,16 @@ void main() {
 	// and base_compositor_effect.gd.)
 	// ---------------------------------------------------------------------------
 
-	vec4 image_colors[9] = get_image_colors(image_coord);
-	vec4 gx = get_axis_gradient(image_colors, X_KERNEL);
-	vec4 gy = get_axis_gradient(image_colors, Y_KERNEL);
+	// BASIC TEST OF A NORMAL SOBEL
+	vec4 normal_roughness_colors[9] = get_normal_roughness_colors(image_coord);
+	vec4 gx = get_axis_gradient(normal_roughness_colors, X_KERNEL);
+	vec4 gy = get_axis_gradient(normal_roughness_colors, Y_KERNEL);
 	vec4 sobel_magnitude = sqrt(gx * gx + gy * gy);
 	float max_sobel = max(sobel_magnitude.r, max(sobel_magnitude.g, sobel_magnitude.b));
 
-	bool is_seed = max_sobel > df.data.sobel_threshold;
+	const float NORMAL_THRESHOLD = 0.5;
+
+	bool is_seed = max_sobel > NORMAL_THRESHOLD;
 	// ---------------------------------------------------------------------------
 	// ---------------------------------------------------------------------------
 
@@ -125,4 +147,8 @@ void main() {
 	}
 
 	imageStore(out_image, image_coord, ivec4(is_seed ? image_coord : INVALID_COORD, 0, 0));
+
+	#ifdef DEBUG
+	imageStore(debug_image, image_coord, get_normal_roughness_color(image_coord));
+	#endif
 }
